@@ -21,8 +21,6 @@ const home: React.FC = () => {
   const [cityFilter, setCityFilter] = useState<string | undefined>(undefined);
   const [cityList, setCityList] = useState<string[]>(["Selecione um estado"]);
 
-  console.log(generalFilter, typeFilter, stateFilter);
-
   useEffect(() => {
     let cities = ["Selecione um estado"];
     brazilianCities.estados.forEach((estado) => {
