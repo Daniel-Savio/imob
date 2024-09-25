@@ -29,25 +29,27 @@ export default function AddForm() {
   const [typeFilter, setTypeFilter] = useState<string | undefined>(undefined);
 
   const addSchema = z.object({
-    imagem: z.string(),
+    imagem: z
+      .instanceof(FileList)
+      .refine((list) => list.length, "Insira ao menos uma imagem do imóvel"),
     preco: z
       .string()
-      .nonempty({ message: "O imóvel necessita de um preço" })
+      .min(1, { message: "O imóvel necessita de um preço" })
       .regex(/^\d{1,3}(\.\d{3})*(,\d{2})?$/),
-    estado: z.string().nonempty({ message: "Selecione um estado" }),
-    cidade: z.string().nonempty({ message: "Selecione um cidade" }),
-    bairro: z.string().nonempty({ message: "Qual o bairro do imóvel?" }),
-    logradouro: z.string().nonempty({ message: "Qual o endereço do imóvel?" }),
-    numero: z.string().nonempty({ message: "Número deve ser inteiro" }),
+    estado: z.string().min(1, { message: "Selecione um estado" }),
+    cidade: z.string().min(1, { message: "Selecione um cidade" }),
+    bairro: z.string().min(1, { message: "Qual o bairro do imóvel?" }),
+    logradouro: z.string().min(1, { message: "Qual o endereço do imóvel?" }),
+    numero: z.string().min(1, { message: "Número deve ser inteiro" }),
     cep: z
       .string()
       .regex(/^\d{5}-\d{3}$/)
       .transform((cep) => {
         return cep.replace(/(\d{5})?/, "$1-");
       }),
-    tipo: z.string().nonempty({ message: "Qual o tipo do imóvel?" }),
-    geral: z.string().nonempty({ message: "Preencha este campo" }),
-    desc: z.string().nonempty({ message: "Descreva o imóvel" }),
+    tipo: z.string().min(1, { message: "Qual o tipo do imóvel?" }),
+    geral: z.string().min(1, { message: "Preencha este campo" }),
+    desc: z.string().min(1, { message: "Descreva o imóvel" }),
   });
 
   type AddFormInputs = z.infer<typeof addSchema>;
@@ -86,91 +88,7 @@ export default function AddForm() {
         className="items-center text-center md:text-left"
       >
         <div className="gap-2 flex flex-col items-center md:items-start md:flex-row md:gap-10 ">
-          <fieldset className="border-t-2 border-violet-500 flex flex-col gap-2 p-2 items-center md:items-start">
-            <legend className="border-solid p-2 text-xl font-bold">
-              Geral
-            </legend>
-            <section className="w-full">
-              <label htmlFor="" className="font-bold">
-                Fotos
-              </label>
-              <div className="border rounded p-2 flex gap-2 items-center w-full bg-zinc-50">
-                <Image className="size-5 text-zinc-600" />
-                <input
-                  type="text"
-                  placeholder=""
-                  className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-full"
-                  {...register("imagem")}
-                />
-              </div>
-
-              {errors.imagem && (
-                <span className="text-red-500 text-sm">
-                  {errors.imagem.message}
-                </span>
-              )}
-            </section>
-            <section className="w-full">
-              <label htmlFor="" className="font-bold">
-                Preço
-              </label>
-              <div className="border rounded p-2 flex gap-2 items-center w-fit bg-zinc-50">
-                <Money className="size-5 text-zinc-600" />
-                <input
-                  type="text"
-                  placeholder="10.000,00"
-                  className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-full"
-                  {...register("preco")}
-                />
-                <span>R$</span>
-              </div>
-              {errors.preco && (
-                <span className="text-red-500 text-sm">
-                  {errors.preco.message}
-                </span>
-              )}
-            </section>
-
-            <section>
-              <label htmlFor="" className="font-bold">
-                Descrição
-              </label>
-              <div className="border rounded p-2 flex gap-2 items-center w-fit bg-zinc-50">
-                <textarea cols={30} rows={4} {...register("desc")} />
-              </div>
-
-              {errors.desc && (
-                <span className="text-red-500 text-sm">
-                  {errors.desc.message}
-                </span>
-              )}
-            </section>
-
-            <div className="flex w-full flex-col gap-1">
-              <label htmlFor="" className="font-bold">
-                Tipos gerais
-              </label>
-              <Combobox
-                placeholderValue="Todos"
-                list={types.general}
-                getValue={setGeneralFilter}
-                value={generalFilter}
-              />
-            </div>
-            <div className="flex w-full flex-col gap-1">
-              <label htmlFor="" className="font-bold">
-                Tipos específicos
-              </label>
-              <Combobox
-                placeholderValue="Todos"
-                list={types.types}
-                getValue={setTypeFilter}
-                value={typeFilter}
-              />
-            </div>
-          </fieldset>
-
-          <fieldset className="border-t-2 border-violet-500 flex flex-col gap-2 p-2 items-center md:items-start">
+          <fieldset className="border-t-2 border-violet-500 flex flex-col gap-2 w-64 p-2 items-center md:items-start">
             <legend className="border-solid p-2 text-xl font-bold">
               Endereço
             </legend>
@@ -294,6 +212,90 @@ export default function AddForm() {
                 </span>
               )}
             </section>
+          </fieldset>
+
+          <fieldset className="border-t-2 border-violet-500 flex flex-col gap-2 p-2 items-center md:items-start">
+            <legend className="border-solid p-2 text-xl font-bold">
+              Geral
+            </legend>
+            <section className="w-full">
+              <label htmlFor="" className="font-bold">
+                Fotos
+              </label>
+              <div className="border rounded p-2 flex gap-2 items-center w-full bg-zinc-50">
+                <Image className="size-5 text-zinc-600" />
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-full"
+                  {...register("imagem")}
+                />
+              </div>
+
+              {errors.imagem && (
+                <span className="text-red-500 text-sm">
+                  {errors.imagem.message}
+                </span>
+              )}
+            </section>
+            <section className="w-full">
+              <label htmlFor="" className="font-bold">
+                Preço
+              </label>
+              <div className="border rounded p-2 flex gap-2 items-center w-fit bg-zinc-50">
+                <Money className="size-5 text-zinc-600" />
+                <input
+                  type="text"
+                  placeholder="10.000,00"
+                  className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-full"
+                  {...register("preco")}
+                />
+                <span>R$</span>
+              </div>
+              {errors.preco && (
+                <span className="text-red-500 text-sm">
+                  {errors.preco.message}
+                </span>
+              )}
+            </section>
+
+            <section>
+              <label htmlFor="" className="font-bold">
+                Descrição
+              </label>
+              <div className="border rounded p-2 flex gap-2 items-center w-fit bg-zinc-50">
+                <textarea cols={30} rows={4} {...register("desc")} />
+              </div>
+
+              {errors.desc && (
+                <span className="text-red-500 text-sm">
+                  {errors.desc.message}
+                </span>
+              )}
+            </section>
+
+            <div className="flex w-full flex-col gap-1">
+              <label htmlFor="" className="font-bold">
+                Tipos gerais
+              </label>
+              <Combobox
+                placeholderValue="Todos"
+                list={types.general}
+                getValue={setGeneralFilter}
+                value={generalFilter}
+              />
+            </div>
+            <div className="flex w-full flex-col gap-1">
+              <label htmlFor="" className="font-bold">
+                Tipos específicos
+              </label>
+              <Combobox
+                placeholderValue="Todos"
+                list={types.types}
+                getValue={setTypeFilter}
+                value={typeFilter}
+              />
+            </div>
           </fieldset>
         </div>
 
