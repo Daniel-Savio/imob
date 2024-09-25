@@ -22,7 +22,6 @@ export default function AddForm() {
   const [stateFilter, setStateFilter] = useState<string | undefined>(undefined); //Handle the state filter
   const [cityFilter, setCityFilter] = useState<string | undefined>(undefined); // Handle the Combobox filter
   const [cityList, setCityList] = useState<string[]>(["Selecione um estado"]); //seleciona uma cidade com base no estado selecionado
-
   const [generalFilter, setGeneralFilter] = useState<string | undefined>(
     undefined
   );
@@ -64,6 +63,10 @@ export default function AddForm() {
     resolver: zodResolver(addSchema),
   });
   const files = watch("imagem");
+  const correctedCep = watch("cep").replace(/(\d{5})(\d{3})/, "$1-$2");
+  const correctedPreco = watch("preco")
+    .replace(/\D/g, "")
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
   console.log(files);
 
@@ -202,6 +205,7 @@ export default function AddForm() {
               <div className="border rounded p-2 flex gap-2 items-center w-fit bg-zinc-50">
                 <Mailbox className="size-5 text-zinc-600" />
                 <input
+                  value={correctedCep}
                   type="string"
                   placeholder="Ex.: 12970-000"
                   className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-full"
@@ -232,10 +236,15 @@ export default function AddForm() {
                   className="w-full h-full text-center cursor-pointer"
                 >
                   <Image className="size-16 m-auto text-zinc-400" />
-                  {files && files.length > 0 && (
+                  {files && files.length > 0 ? (
                     <span className="m-auto text-zinc-400">
                       {" "}
                       Arquivos selecionados: {files.length}{" "}
+                    </span>
+                  ) : (
+                    <span className="m-auto text-zinc-400">
+                      {" "}
+                      Selecione as fotos do imovel
                     </span>
                   )}
                 </label>
@@ -267,8 +276,9 @@ export default function AddForm() {
               <div className="border rounded p-2 flex gap-2 items-center w-fit bg-zinc-50">
                 <Money className="size-5 text-zinc-600" />
                 <input
+                  value={correctedPreco}
                   type="text"
-                  placeholder="10.000,00"
+                  placeholder="100.000"
                   className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-full"
                   {...register("preco")}
                 />
