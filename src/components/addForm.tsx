@@ -9,7 +9,13 @@ import types from "@/assets/types";
 import { StatesCombobox } from "./specific/statesCombobox";
 import { Combobox } from "./ui/combobox";
 import { useState, useEffect } from "react";
-import { Image, Money, House, NumberCircleThree } from "phosphor-react";
+import {
+  Image,
+  Money,
+  House,
+  NumberCircleThree,
+  FloppyDisk,
+} from "phosphor-react";
 import { Mailbox } from "lucide-react";
 
 export default function AddForm() {
@@ -36,6 +42,7 @@ export default function AddForm() {
     cep: z.string().regex(/^\d{5}-\d{3}$/),
     tipo: z.string().nonempty({ message: "Qual o tipo do imóvel?" }),
     geral: z.string().nonempty({ message: "Preencha este campo" }),
+    desc: z.string().nonempty({ message: "Descreva o imóvel" }),
   });
 
   type AddFormInputs = z.infer<typeof addSchema>;
@@ -71,12 +78,13 @@ export default function AddForm() {
       <form
         action="submit"
         onSubmit={handleSubmit(onSubmit)}
-        className="gap-2 flex flex-col md:flex-row md:gap-10 "
+        className="items-center text-center md:text-left"
       >
-        <fieldset className="border-t-2 border-violet-500  p-2">
-          <legend className="border-solid p-2 text-xl font-bold">Geral</legend>
-
-          <div className="flex flex-col gap-1">
+        <div className="gap-2 flex flex-col items-center md:items-start md:flex-row md:gap-10 ">
+          <fieldset className="border-t-2 border-violet-500 flex flex-col gap-2 items-center md:items-start">
+            <legend className="border-solid p-2 text-xl font-bold">
+              Geral
+            </legend>
             <section className="">
               <label htmlFor="" className="font-bold">
                 Fotos
@@ -86,7 +94,7 @@ export default function AddForm() {
                 <input
                   type="text"
                   placeholder=""
-                  className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-40"
+                  className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-56"
                   {...register("imagem")}
                 />
               </div>
@@ -97,7 +105,6 @@ export default function AddForm() {
                 </span>
               )}
             </section>
-
             <section>
               <label htmlFor="" className="font-bold">
                 Preço
@@ -118,163 +125,178 @@ export default function AddForm() {
                 </span>
               )}
             </section>
-          </div>
-        </fieldset>
 
-        <fieldset className="border-t-2 border-violet-500 flex flex-col gap-3 p-2">
-          <legend className="border-solid p-2 text-xl font-bold">
-            Endereço
-          </legend>
-          <div className="flex flex-col gap-1">
-            <label htmlFor="" className="font-bold">
-              Estado
-            </label>
-            <StatesCombobox
-              placeholderValue="Todos"
-              list={brazilianStates.UF}
-              getValue={setStateFilter}
-              value={stateFilter}
-            />
+            <section>
+              <label htmlFor="" className="font-bold">
+                Descrição
+              </label>
+              <div className="border rounded p-2 flex gap-2 items-center w-fit bg-zinc-50">
+                <textarea cols={30} rows={4} {...register("desc")} />
+              </div>
 
-            {errors.estado && (
-              <span className="text-red-500 text-sm">
-                {errors.estado.message}
-              </span>
-            )}
-          </div>
+              {errors.desc && (
+                <span className="text-red-500 text-sm">
+                  {errors.desc.message}
+                </span>
+              )}
+            </section>
 
-          <div className="flex flex-col gap-1">
-            <label htmlFor="" className="font-bold">
-              Cidade
-            </label>
-            <Combobox
-              placeholderValue="Tudo"
-              list={cityList}
-              getValue={setCityFilter}
-              value={cityFilter}
-            />
-            {errors.cidade && (
-              <span className="text-red-500 text-sm">
-                {errors.cidade.message}
-              </span>
-            )}
-          </div>
-
-          <section>
-            <label htmlFor="" className="font-bold">
-              Bairro
-            </label>
-            <div className="border rounded p-2 flex gap-2 items-center w-fit bg-zinc-50">
-              <House className="size-5 text-zinc-600" />
-              <input
-                type="text"
-                placeholder="Bairro"
-                className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-40"
-                {...register("bairro")}
+            <div className="flex flex-col gap-1">
+              <label htmlFor="" className="font-bold">
+                Tipos gerais
+              </label>
+              <Combobox
+                placeholderValue="Todos"
+                list={types.general}
+                getValue={setGeneralFilter}
+                value={generalFilter}
               />
             </div>
+            <div className="flex flex-col gap-1">
+              <label htmlFor="" className="font-bold">
+                Tipos específicos
+              </label>
+              <Combobox
+                placeholderValue="Todos"
+                list={types.types}
+                getValue={setTypeFilter}
+                value={typeFilter}
+              />
+            </div>
+          </fieldset>
 
-            {errors.bairro && (
-              <span className="text-red-500 text-sm">
-                {errors.bairro.message}
-              </span>
-            )}
-          </section>
-
-          <section>
-            <label htmlFor="" className="font-bold">
+          <fieldset className="border-t-2 border-violet-500 flex flex-col gap-2 p-2 items-center md:items-start">
+            <legend className="border-solid p-2 text-xl font-bold">
               Endereço
-            </label>
-            <div className="border rounded p-2 flex gap-2 items-center w-fit bg-zinc-50">
-              <House className="size-5 text-zinc-600" />
-              <input
-                type="text"
-                placeholder="Ex.: Rua, Avenida, Estrada, etc"
-                className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-40"
-                {...register("logradouro")}
+            </legend>
+            <div className="flex flex-col gap-1">
+              <label htmlFor="" className="font-bold">
+                Estado
+              </label>
+              <StatesCombobox
+                placeholderValue="Todos"
+                list={brazilianStates.UF}
+                getValue={setStateFilter}
+                value={stateFilter}
               />
+
+              {errors.estado && (
+                <span className="text-red-500 text-sm">
+                  {errors.estado.message}
+                </span>
+              )}
             </div>
 
-            {errors.logradouro && (
-              <span className="text-red-500 text-sm">
-                {errors.logradouro.message}
-              </span>
-            )}
-          </section>
-
-          <section>
-            <label htmlFor="" className="font-bold">
-              Número
-            </label>
-            <div className="border rounded p-2 flex gap-2 items-center w-fit bg-zinc-50">
-              <NumberCircleThree className="size-5 text-zinc-600" />
-              <input
-                type="number"
-                placeholder="Ex.: 109"
-                className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-40"
-                maxLength={5}
-                {...register("numero")}
+            <div className="flex flex-col gap-1">
+              <label htmlFor="" className="font-bold">
+                Cidade
+              </label>
+              <Combobox
+                placeholderValue="Tudo"
+                list={cityList}
+                getValue={setCityFilter}
+                value={cityFilter}
               />
+              {errors.cidade && (
+                <span className="text-red-500 text-sm">
+                  {errors.cidade.message}
+                </span>
+              )}
             </div>
 
-            {errors.numero && (
-              <span className="text-red-500 text-sm">
-                {errors.numero.message}
-              </span>
-            )}
-          </section>
+            <section>
+              <label htmlFor="" className="font-bold">
+                Bairro
+              </label>
+              <div className="border rounded p-2 flex gap-2 items-center w-fit bg-zinc-50">
+                <House className="size-5 text-zinc-600" />
+                <input
+                  type="text"
+                  placeholder="Bairro"
+                  className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-56"
+                  {...register("bairro")}
+                />
+              </div>
 
-          <section>
-            <label htmlFor="" className="font-bold">
-              CEP
-            </label>
-            <div className="border rounded p-2 flex gap-2 items-center w-fit bg-zinc-50">
-              <Mailbox className="size-5 text-zinc-600" />
-              <input
-                type="string"
-                placeholder="Ex.: 12970-000"
-                className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-40"
-                maxLength={9}
-                {...register("cep")}
-              />
-            </div>
+              {errors.bairro && (
+                <span className="text-red-500 text-sm">
+                  {errors.bairro.message}
+                </span>
+              )}
+            </section>
 
-            {errors.cep && (
-              <span className="text-red-500 text-sm">{errors.cep.message}</span>
-            )}
-          </section>
-        </fieldset>
+            <section>
+              <label htmlFor="" className="font-bold">
+                Endereço
+              </label>
+              <div className="border rounded p-2 flex gap-2 items-center w-fit bg-zinc-50">
+                <House className="size-5 text-zinc-600" />
+                <input
+                  type="text"
+                  placeholder="Ex.: Rua, Avenida, Estrada, etc"
+                  className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-56"
+                  {...register("logradouro")}
+                />
+              </div>
 
-        <fieldset className="border-t-2 border-violet-500  p-2">
-          <legend className="border-solid p-2 text-xl font-bold">Geral</legend>
-          <div className="flex flex-col gap-1">
-            <label htmlFor="" className="font-bold">
-              Tipos gerais
-            </label>
-            <Combobox
-              placeholderValue="Todos"
-              list={types.general}
-              getValue={setGeneralFilter}
-              value={generalFilter}
-            />
-          </div>
-          <div className="flex flex-col gap-1">
-            <label htmlFor="" className="font-bold">
-              Tipos específicos
-            </label>
-            <Combobox
-              placeholderValue="Todos"
-              list={types.types}
-              getValue={setTypeFilter}
-              value={typeFilter}
-            />
-          </div>
-        </fieldset>
+              {errors.logradouro && (
+                <span className="text-red-500 text-sm">
+                  {errors.logradouro.message}
+                </span>
+              )}
+            </section>
+
+            <section>
+              <label htmlFor="" className="font-bold">
+                Número
+              </label>
+              <div className="border rounded p-2 flex gap-2 items-center w-fit bg-zinc-50">
+                <NumberCircleThree className="size-5 text-zinc-600" />
+                <input
+                  type="number"
+                  placeholder="Ex.: 109"
+                  className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-56"
+                  maxLength={5}
+                  {...register("numero")}
+                />
+              </div>
+
+              {errors.numero && (
+                <span className="text-red-500 text-sm">
+                  {errors.numero.message}
+                </span>
+              )}
+            </section>
+
+            <section>
+              <label htmlFor="" className="font-bold">
+                CEP
+              </label>
+              <div className="border rounded p-2 flex gap-2 items-center w-fit bg-zinc-50">
+                <Mailbox className="size-5 text-zinc-600" />
+                <input
+                  type="string"
+                  placeholder="Ex.: 12970-000"
+                  className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-56"
+                  maxLength={9}
+                  {...register("cep")}
+                />
+              </div>
+
+              {errors.cep && (
+                <span className="text-red-500 text-sm">
+                  {errors.cep.message}
+                </span>
+              )}
+            </section>
+          </fieldset>
+        </div>
 
         <button
-          className="p-2 rounded-sm mt-4 bg-violet-500 max-h-fit m-auto font-semibold text-zinc-50"
+          className="p-2 rounded-sm flex mt-4 mx-auto bg-violet-500 max-h-fit font-semibold text-zinc-50"
           type="submit"
         >
+          <FloppyDisk size={22} />
           Salvar imóvel
         </button>
       </form>
