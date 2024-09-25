@@ -48,7 +48,7 @@ export function StatesCombobox({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-56 justify-between"
+          className="w-full justify-between"
         >
           {selectedValue ? selectedValue : placeholderValue}
 

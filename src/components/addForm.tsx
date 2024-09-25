@@ -39,7 +39,12 @@ export default function AddForm() {
     bairro: z.string().nonempty({ message: "Qual o bairro do imóvel?" }),
     logradouro: z.string().nonempty({ message: "Qual o endereço do imóvel?" }),
     numero: z.string().nonempty({ message: "Número deve ser inteiro" }),
-    cep: z.string().regex(/^\d{5}-\d{3}$/),
+    cep: z
+      .string()
+      .regex(/^\d{5}-\d{3}$/)
+      .transform((cep) => {
+        return cep.replace(/(\d{5})?/, "$1-");
+      }),
     tipo: z.string().nonempty({ message: "Qual o tipo do imóvel?" }),
     geral: z.string().nonempty({ message: "Preencha este campo" }),
     desc: z.string().nonempty({ message: "Descreva o imóvel" }),
@@ -81,20 +86,20 @@ export default function AddForm() {
         className="items-center text-center md:text-left"
       >
         <div className="gap-2 flex flex-col items-center md:items-start md:flex-row md:gap-10 ">
-          <fieldset className="border-t-2 border-violet-500 flex flex-col gap-2 items-center md:items-start">
+          <fieldset className="border-t-2 border-violet-500 flex flex-col gap-2 p-2 items-center md:items-start">
             <legend className="border-solid p-2 text-xl font-bold">
               Geral
             </legend>
-            <section className="">
+            <section className="w-full">
               <label htmlFor="" className="font-bold">
                 Fotos
               </label>
-              <div className="border rounded p-2 flex gap-2 items-center w-fit bg-zinc-50">
+              <div className="border rounded p-2 flex gap-2 items-center w-full bg-zinc-50">
                 <Image className="size-5 text-zinc-600" />
                 <input
                   type="text"
                   placeholder=""
-                  className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-56"
+                  className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-full"
                   {...register("imagem")}
                 />
               </div>
@@ -105,7 +110,7 @@ export default function AddForm() {
                 </span>
               )}
             </section>
-            <section>
+            <section className="w-full">
               <label htmlFor="" className="font-bold">
                 Preço
               </label>
@@ -114,7 +119,7 @@ export default function AddForm() {
                 <input
                   type="text"
                   placeholder="10.000,00"
-                  className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-32"
+                  className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-full"
                   {...register("preco")}
                 />
                 <span>R$</span>
@@ -141,7 +146,7 @@ export default function AddForm() {
               )}
             </section>
 
-            <div className="flex flex-col gap-1">
+            <div className="flex w-full flex-col gap-1">
               <label htmlFor="" className="font-bold">
                 Tipos gerais
               </label>
@@ -152,7 +157,7 @@ export default function AddForm() {
                 value={generalFilter}
               />
             </div>
-            <div className="flex flex-col gap-1">
+            <div className="flex w-full flex-col gap-1">
               <label htmlFor="" className="font-bold">
                 Tipos específicos
               </label>
@@ -169,7 +174,7 @@ export default function AddForm() {
             <legend className="border-solid p-2 text-xl font-bold">
               Endereço
             </legend>
-            <div className="flex flex-col gap-1">
+            <div className="flex w-full flex-col gap-1">
               <label htmlFor="" className="font-bold">
                 Estado
               </label>
@@ -187,7 +192,7 @@ export default function AddForm() {
               )}
             </div>
 
-            <div className="flex flex-col gap-1">
+            <div className="flex w-full flex-col gap-1">
               <label htmlFor="" className="font-bold">
                 Cidade
               </label>
@@ -213,7 +218,7 @@ export default function AddForm() {
                 <input
                   type="text"
                   placeholder="Bairro"
-                  className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-56"
+                  className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-full"
                   {...register("bairro")}
                 />
               </div>
@@ -234,7 +239,7 @@ export default function AddForm() {
                 <input
                   type="text"
                   placeholder="Ex.: Rua, Avenida, Estrada, etc"
-                  className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-56"
+                  className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-full"
                   {...register("logradouro")}
                 />
               </div>
@@ -255,7 +260,7 @@ export default function AddForm() {
                 <input
                   type="number"
                   placeholder="Ex.: 109"
-                  className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-56"
+                  className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-full"
                   maxLength={5}
                   {...register("numero")}
                 />
@@ -277,7 +282,7 @@ export default function AddForm() {
                 <input
                   type="string"
                   placeholder="Ex.: 12970-000"
-                  className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-56"
+                  className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-full"
                   maxLength={9}
                   {...register("cep")}
                 />
