@@ -57,6 +57,14 @@ export const theme = {
       lg: `var(--radius)`,
       md: `calc(var(--radius) - 2px)`,
       sm: "calc(var(--radius) - 4px)",
+      blob: `
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: repeat;
+  background-image: url("data:image/svg+xml;utf8,%3Csvg viewBox=%220 0 1000 1000%22 xmlns=%22http:%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cdefs%3E%3CclipPath id=%22a%22%3E%3Cpath fill=%22currentColor%22 d=%22M828 672Q699 844 519.5 810t-300-172Q99 500 216 355.5t312.5-194Q724 112 840.5 306T828 672Z%22%2F%3E%3C%2FclipPath%3E%3C%2Fdefs%3E%3Cg clip-path=%22url(%23a)%22%3E%3Cpath fill=%22%238b5cf6%22 d=%22M828 672Q699 844 519.5 810t-300-172Q99 500 216 355.5t312.5-194Q724 112 840.5 306T828 672Z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+`,
     },
     fontFamily: {
       sans: ["Inter"],
