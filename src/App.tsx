@@ -17,7 +17,7 @@ function App() {
           <TabsList className=" flex bg-transparent w-full gap-4 justify-around">
             <div
               id="trail"
-              className="absolute -z-10 backdrop-blur-md h-8 bg-white/20 rounded-full px-40 w-full shadow-lg"
+              className="absolute -z-10 backdrop-blur-md h-8 bg-white/20 rounded-full px-40 py-5 w-full shadow-lg"
             ></div>
 
             <Link to="/">

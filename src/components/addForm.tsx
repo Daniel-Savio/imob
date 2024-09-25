@@ -58,10 +58,14 @@ export default function AddForm() {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<AddFormInputs>({
     resolver: zodResolver(addSchema),
   });
+  const files = watch("imagem");
+
+  console.log(files);
 
   useEffect(() => {
     let cities = ["Selecione um estado"];
@@ -222,20 +226,38 @@ export default function AddForm() {
               <label htmlFor="" className="font-bold">
                 Fotos
               </label>
-              <div className="border rounded p-2 flex gap-2 items-center w-full bg-zinc-50">
-                <Image className="size-5 text-zinc-600" />
+              <div className="rounded flex gap-2 items-center w-full bg-zinc-50 border-dashed border-zinc-400 border-2">
+                <label
+                  htmlFor="image"
+                  className="w-full h-full text-center cursor-pointer"
+                >
+                  <Image className="size-16 m-auto text-zinc-400" />
+                  {files && files.length > 0 && (
+                    <span className="m-auto text-zinc-400">
+                      {" "}
+                      Arquivos selecionados: {files.length}{" "}
+                    </span>
+                  )}
+                </label>
+
                 <input
                   type="file"
+                  id="image"
                   accept="image/*"
-                  className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-full"
+                  multiple
+                  className="hidden outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-full"
                   {...register("imagem")}
                 />
               </div>
 
-              {errors.imagem && (
-                <span className="text-red-500 text-sm">
-                  {errors.imagem.message}
-                </span>
+              {files && files.length > 0 && (
+                <div className="flex flex-col gap-px overflow-scroll max-h-24">
+                  {Array.from(files).map((file) => {
+                    return (
+                      <span className="text-sm text-zinc-400">{file.name}</span>
+                    );
+                  })}
+                </div>
               )}
             </section>
             <section className="w-full">
