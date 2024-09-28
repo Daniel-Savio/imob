@@ -61,14 +61,16 @@ export default function AddForm() {
     formState: { errors },
   } = useForm<AddFormInputs>({
     resolver: zodResolver(addSchema),
+    defaultValues: {
+      preco: "10000",
+      cep: "12970000",
+    },
   });
   const files = watch("imagem");
   const correctedCep = watch("cep").replace(/(\d{5})(\d{3})/, "$1-$2");
   const correctedPreco = watch("preco")
     .replace(/\D/g, "")
     .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-
-  console.log(files);
 
   useEffect(() => {
     let cities = ["Selecione um estado"];
