@@ -28,7 +28,7 @@ export default function AddForm() {
   const [typeFilter, setTypeFilter] = useState<string | undefined>(undefined);
 
   const addSchema = z.object({
-    imagem: z
+    imagens: z
       .instanceof(FileList)
       .refine((list) => list.length, "Insira ao menos uma imagem do imóvel"),
     preco: z
@@ -66,7 +66,7 @@ export default function AddForm() {
       cep: "12970000",
     },
   });
-  const files = watch("imagem");
+  const files = watch("imagens");
   const correctedCep = watch("cep").replace(/(\d{5})(\d{3})/, "$1-$2");
   const correctedPreco = watch("preco")
     .replace(/\D/g, "")
@@ -257,7 +257,7 @@ export default function AddForm() {
                   accept="image/*"
                   multiple
                   className="hidden outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-full"
-                  {...register("imagem")}
+                  {...register("imagens")}
                 />
               </div>
 
