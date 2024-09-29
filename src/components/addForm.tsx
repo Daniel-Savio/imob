@@ -96,12 +96,17 @@ export default function AddForm() {
     const sendImageLinks: string[] = (await response).data;
     let index = 0;
     console.log(sendImageLinks[index]);
-    sendImageLinks.forEach((link) => {
-      axios.put(link, formData.imagens[index]);
+    sendImageLinks.forEach(async (link) => {
+      await axios.put(link, formData.imagens[index]);
       index++;
     });
-  }
 
+    const imovelSubmited = await axios.post(
+      "http://localhost:3030/imovel",
+      submitData
+    );
+    console.log(imovelSubmited);
+  }
   return (
     <div className="text-zinc-600 w-full">
       <form
