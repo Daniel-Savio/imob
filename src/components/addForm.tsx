@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
+import { createId } from "@paralleldrive/cuid2";
 
 import brazilianStates from "@/assets/states";
 import brazilianCities from "@/assets/cities";
@@ -19,6 +20,9 @@ import {
 } from "phosphor-react";
 import { Mailbox } from "lucide-react";
 
+import addSchema from "@/schemas/addFormSchema";
+import submitImovelSchema from "@/schemas/submitImovelSchema";
+
 export default function AddForm() {
   const [stateFilter, setStateFilter] = useState<string | undefined>(undefined); //Handle the state filter
   const [cityFilter, setCityFilter] = useState<string | undefined>(undefined); // Handle the Combobox filter
@@ -28,33 +32,8 @@ export default function AddForm() {
   );
   const [typeFilter, setTypeFilter] = useState<string | undefined>(undefined);
 
-  const addSchema = z.object({
-    imagens: z
-      .instanceof(FileList)
-      .refine((list) => list.length, "Insira ao menos uma imagem do imóvel")
-      .transform((list) => {
-        const fileList: File[] = [];
-        for (let i = 0; i < list.length; i++) {
-          fileList.push(list[i]);
-        }
-        return fileList;
-      }),
-    preco: z
-      .string()
-      .min(1, { message: "O imóvel necessita de um preço" })
-      .regex(/^\d{1,3}(\.\d{3})*(,\d{2})?$/),
-    estado: z.string().min(1, { message: "Selecione um estado" }),
-    cidade: z.string().min(1, { message: "Selecione um cidade" }),
-    bairro: z.string().min(1, { message: "Qual o bairro do imóvel?" }),
-    logradouro: z.string().min(1, { message: "Qual o endereço do imóvel?" }),
-    numero: z.string().min(1, { message: "Número deve ser inteiro" }),
-    cep: z.string().regex(/^\d{5}-\d{3}$/),
-    tipo: z.string().min(1, { message: "Qual o tipo do imóvel?" }),
-    geral: z.string().min(1, { message: "Preencha este campo" }),
-    desc: z.string().min(1, { message: "Descreva o imóvel" }),
-  });
-
   type AddFormInputs = z.infer<typeof addSchema>;
+  type SubmitImovelType = z.infer<typeof submitImovelSchema>;
 
   const {
     register,
@@ -88,11 +67,39 @@ export default function AddForm() {
     setValue("geral", generalFilter!);
   }, [stateFilter, cityFilter, typeFilter, generalFilter, setValue]);
 
-  function onSubmit(formData: AddFormInputs) {
-    const response = axios.post("http://localhost:3030/imovel", formData, {
-      headers: {},
+  async function onSubmit(formData: AddFormInputs) {
+    const newFileNames: string[] = [];
+    formData.imagens.forEach((imagem: File) => {
+      const extensao = imagem.name.match(/\.\w+$/); //A interrogação é apenas para confirmar que o objeto não irá ser nulo
+      const newName = `${createId()}${extensao?.at(0)}`;
+      newFileNames.push(newName);
     });
-    response.then((response) => console.log(response));
+
+    const submitData: SubmitImovelType = {
+      imagens: newFileNames,
+      bairro: formData.bairro,
+      cep: formData.cep,
+      cidade: formData.cidade,
+      desc: formData.desc,
+      estado: formData.estado,
+      geral: formData.geral,
+      logradouro: formData.logradouro,
+      numero: formData.numero,
+      preco: formData.preco,
+      tipo: formData.tipo,
+    };
+
+    const response = axios.post(
+      "http://localhost:3030/upload",
+      submitData.imagens
+    );
+    const sendImageLinks: string[] = (await response).data;
+    let index = 0;
+    console.log(sendImageLinks[index]);
+    sendImageLinks.forEach((link) => {
+      axios.put(link, formData.imagens[index]);
+      index++;
+    });
   }
 
   return (
