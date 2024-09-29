@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
 
 import brazilianStates from "@/assets/states";
 import brazilianCities from "@/assets/cities";
@@ -30,7 +31,14 @@ export default function AddForm() {
   const addSchema = z.object({
     imagens: z
       .instanceof(FileList)
-      .refine((list) => list.length, "Insira ao menos uma imagem do imóvel"),
+      .refine((list) => list.length, "Insira ao menos uma imagem do imóvel")
+      .transform((list) => {
+        const fileList: File[] = [];
+        for (let i = 0; i < list.length; i++) {
+          fileList.push(list[i]);
+        }
+        return fileList;
+      }),
     preco: z
       .string()
       .min(1, { message: "O imóvel necessita de um preço" })
@@ -40,12 +48,7 @@ export default function AddForm() {
     bairro: z.string().min(1, { message: "Qual o bairro do imóvel?" }),
     logradouro: z.string().min(1, { message: "Qual o endereço do imóvel?" }),
     numero: z.string().min(1, { message: "Número deve ser inteiro" }),
-    cep: z
-      .string()
-      .regex(/^\d{5}-\d{3}$/)
-      .transform((cep) => {
-        return cep.replace(/(\d{5})?/, "$1-");
-      }),
+    cep: z.string().regex(/^\d{5}-\d{3}$/),
     tipo: z.string().min(1, { message: "Qual o tipo do imóvel?" }),
     geral: z.string().min(1, { message: "Preencha este campo" }),
     desc: z.string().min(1, { message: "Descreva o imóvel" }),
@@ -85,8 +88,11 @@ export default function AddForm() {
     setValue("geral", generalFilter!);
   }, [stateFilter, cityFilter, typeFilter, generalFilter, setValue]);
 
-  function onSubmit(data: AddFormInputs) {
-    console.log(data);
+  function onSubmit(formData: AddFormInputs) {
+    const response = axios.post("http://localhost:3030/imovel", formData, {
+      headers: {},
+    });
+    response.then((response) => console.log(response));
   }
 
   return (
