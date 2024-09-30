@@ -1,4 +1,5 @@
 import "./App.css";
+import { Toaster } from "@/components/ui/sonner";
 import { HomeIcon, LockKeyhole } from "lucide-react";
 
 // import IconBg from "../public/Icon-bg.png"
@@ -13,6 +14,7 @@ function App() {
   return (
     <BrowserRouter>
       <header className=" fixed top-0 flex p-2 justify-center w-full align-middle text-zinc-600">
+        <Toaster />
         <Tabs className="relative flex" defaultValue="home">
           <TabsList className=" flex bg-transparent w-full gap-4 justify-around">
             <div

@@ -23,7 +23,11 @@ import { Mailbox } from "lucide-react";
 import addSchema from "@/schemas/addFormSchema";
 import submitImovelSchema from "@/schemas/submitImovelSchema";
 
-export default function AddForm() {
+export interface AddedImovelType {
+  addedImovelState: (state: boolean) => void;
+}
+
+export default function AddForm({ addedImovelState }: AddedImovelType) {
   const [stateFilter, setStateFilter] = useState<string | undefined>(undefined); //Handle the state filter
   const [cityFilter, setCityFilter] = useState<string | undefined>(undefined); // Handle the Combobox filter
   const [cityList, setCityList] = useState<string[]>(["Selecione um estado"]); //seleciona uma cidade com base no estado selecionado
@@ -105,17 +109,18 @@ export default function AddForm() {
       "http://localhost:3030/imovel",
       submitData
     );
-    console.log(imovelSubmited);
+    if (imovelSubmited) addedImovelState(true);
   }
+
   return (
     <div className="text-zinc-600 w-full">
       <form
         action="submit"
         onSubmit={handleSubmit(onSubmit)}
-        className="items-center text-center md:text-left"
+        className="items-center w-full text-center md:text-left"
       >
-        <div className="gap-2 flex flex-col items-center md:items-start md:flex-row md:gap-10 ">
-          <fieldset className="border-t-2 border-violet-500 flex flex-col gap-2 w-64 p-2 items-center md:items-start">
+        <div className="gap-2 flex flex-col  w-full justify-around md:items-start md:flex-row md:gap-10 ">
+          <fieldset className="border-t-2 border-violet-500 flex flex-col gap-2  p-2 items-center w-full md:items-start">
             <legend className="border-solid p-2 text-xl font-bold">
               Endereço
             </legend>
@@ -154,11 +159,11 @@ export default function AddForm() {
               )}
             </div>
 
-            <section>
+            <section className="w-full">
               <label htmlFor="" className="font-bold">
                 Bairro
               </label>
-              <div className="border rounded p-2 flex gap-2 items-center w-fit bg-zinc-50">
+              <div className="border rounded p-2 flex gap-2 items-center w-full bg-zinc-50">
                 <House className="size-5 text-zinc-600" />
                 <input
                   type="text"
@@ -175,11 +180,11 @@ export default function AddForm() {
               )}
             </section>
 
-            <section>
+            <section className="w-full">
               <label htmlFor="" className="font-bold">
                 Endereço
               </label>
-              <div className="border rounded p-2 flex gap-2 items-center w-fit bg-zinc-50">
+              <div className="border rounded p-2 flex gap-2 items-center w-full bg-zinc-50">
                 <House className="size-5 text-zinc-600" />
                 <input
                   type="text"
@@ -196,11 +201,11 @@ export default function AddForm() {
               )}
             </section>
 
-            <section>
+            <section className="w-full">
               <label htmlFor="" className="font-bold">
                 Número
               </label>
-              <div className="border rounded p-2 flex gap-2 items-center w-fit bg-zinc-50">
+              <div className="border rounded p-2 flex gap-2 items-center w-full bg-zinc-50">
                 <NumberCircleThree className="size-5 text-zinc-600" />
                 <input
                   type="number"
@@ -218,11 +223,11 @@ export default function AddForm() {
               )}
             </section>
 
-            <section>
+            <section className="w-full">
               <label htmlFor="" className="font-bold">
                 CEP
               </label>
-              <div className="border rounded p-2 flex gap-2 items-center w-fit bg-zinc-50">
+              <div className="border rounded p-2 flex gap-2 items-center w-full bg-zinc-50">
                 <Mailbox className="size-5 text-zinc-600" />
                 <input
                   value={correctedCep}
@@ -242,7 +247,7 @@ export default function AddForm() {
             </section>
           </fieldset>
 
-          <fieldset className="border-t-2 border-violet-500 flex flex-col gap-2 p-2 items-center md:items-start">
+          <fieldset className="border-t-2 border-violet-500 flex flex-col gap-2 p-2 w-full items-center md:items-start">
             <legend className="border-solid p-2 text-xl font-bold">
               Geral
             </legend>
@@ -293,7 +298,7 @@ export default function AddForm() {
               <label htmlFor="" className="font-bold">
                 Preço
               </label>
-              <div className="border rounded p-2 flex gap-2 items-center w-fit bg-zinc-50">
+              <div className="border rounded p-2 flex gap-2 items-center w-full bg-zinc-50">
                 <Money className="size-5 text-zinc-600" />
                 <input
                   value={correctedPreco}
@@ -311,12 +316,17 @@ export default function AddForm() {
               )}
             </section>
 
-            <section>
+            <section className="w-full">
               <label htmlFor="" className="font-bold">
                 Descrição
               </label>
-              <div className="border rounded p-2 flex gap-2 items-center w-fit bg-zinc-50">
-                <textarea cols={30} rows={4} {...register("desc")} />
+              <div className="border rounded flex p-2 items-center justify-center w-full h-fit bg-zinc-50">
+                <textarea
+                  className="h-fit shadow-md"
+                  cols={30}
+                  rows={9}
+                  {...register("desc")}
+                />
               </div>
 
               {errors.desc && (
