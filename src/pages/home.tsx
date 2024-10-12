@@ -30,14 +30,14 @@ const home: React.FC = () => {
   }, [stateFilter]);
 
   return (
-    <div className=" text-zinc-600 h-screen bg-gradient-to-tl from-indigo-300 to-zinc-50  pt-20 px-2 flex flex-col items-center">
+    <div className=" text-zinc-600 h-screen bg-gradient-to-tl from-blue-300 to-zinc-50  pt-20 px-2 flex flex-col items-center">
       <div className="absolute bottom-10 md:right-24  ">
         <Popover>
-          <PopoverTrigger className="p-2 magicpattern flex justify-center md:w-[90px] items-center">
+          <PopoverTrigger className="p-2 rounded-full bg-blue-700 flex justify-center md:w-[90px] items-center">
             <FilterIcon className="text-zinc-50 md:size-8"></FilterIcon>
           </PopoverTrigger>
 
-          <PopoverContent className="flex flex-col items-center bg-gradient-to-tl from-indigo-200 to-zinc-50 md:mr-4">
+          <PopoverContent className="flex flex-col items-center bg-gradient-to-tl from-blue-200 to-zinc-50 md:mr-4">
             <h1 className="font-bold text-lg">Localidade</h1>
 
             <div className="text-left w-full">

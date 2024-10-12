@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const imovelSchema = z.object({
     id: z.string(),
-    imagens: z.array(z.string()),
+    imageList: z.array(z.string()),
     createdAt: z.string(),
     updatedAt: z.string(),
     preco: z

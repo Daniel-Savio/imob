@@ -28,7 +28,7 @@ export default function loginForm() {
 
   return (
     <div className="m-auto">
-      <h1 className="font-univers font-bold text-5xl text-violet-600 mb-4 text-center">
+      <h1 className="font-univers font-bold text-5xl text-blue-600 mb-4 text-center">
         Login
       </h1>
 
@@ -38,7 +38,7 @@ export default function loginForm() {
         onSubmit={handleSubmit(onSubmit)}
       >
         <div>
-          <label htmlFor="email" className="font-univers  text-violet-600">
+          <label htmlFor="email" className="font-univers  text-blue-600">
             {" "}
             E-mail
           </label>
@@ -57,7 +57,7 @@ export default function loginForm() {
         </div>
 
         <div>
-          <label htmlFor="email" className="font-univers  text-violet-600">
+          <label htmlFor="email" className="font-univers  text-blue-600">
             {" "}
             Senha
           </label>
@@ -76,7 +76,7 @@ export default function loginForm() {
         </div>
         <Link to="/admin">
           <button
-            className="p-2 rounded-sm mt-4 bg-violet-500 font-semibold text-zinc-50"
+            className="p-2 rounded-sm mt-4 bg-blue-500 font-semibold text-zinc-50"
             type="submit"
           >
             Login

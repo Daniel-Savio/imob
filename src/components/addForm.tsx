@@ -117,10 +117,10 @@ export default function AddForm({ addedImovelState }: AddedImovelType) {
       <form
         action="submit"
         onSubmit={handleSubmit(onSubmit)}
-        className="items-center w-full text-center md:text-left"
+        className="items-center w-full text-center md:text-left overflow-auto max-h-[800px]"
       >
-        <div className="gap-2 flex flex-col  w-full justify-around md:items-start md:flex-row md:gap-10 ">
-          <fieldset className="border-t-2 border-violet-500 flex flex-col gap-2  p-2 items-center w-full md:items-start">
+        <div className="gap-2 flex flex-col  w-full justify-around md:items-start md:block ">
+          <fieldset className="border-t-2 border-blue-500 flex flex-col gap-2  p-2 items-center w-full md:items-start">
             <legend className="border-solid p-2 text-xl font-bold">
               Endereço
             </legend>
@@ -247,7 +247,7 @@ export default function AddForm({ addedImovelState }: AddedImovelType) {
             </section>
           </fieldset>
 
-          <fieldset className="border-t-2 border-violet-500 flex flex-col gap-2 p-2 w-full items-center md:items-start">
+          <fieldset className="border-t-2 border-blue-500 flex flex-col gap-2 p-2 w-full items-center md:items-start">
             <legend className="border-solid p-2 text-xl font-bold">
               Geral
             </legend>
@@ -362,7 +362,7 @@ export default function AddForm({ addedImovelState }: AddedImovelType) {
         </div>
 
         <button
-          className="p-2 rounded-sm flex mt-4 mx-auto bg-violet-500 max-h-fit font-semibold text-zinc-50"
+          className="p-2 rounded-sm flex mt-4 mx-auto bg-blue-500 max-h-fit font-semibold text-zinc-50"
           type="submit"
         >
           <FloppyDisk size={22} />
