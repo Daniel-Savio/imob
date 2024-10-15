@@ -23,7 +23,7 @@ const PublicImovelCard = (props: Props) => {
 
   return (
     <motion.div
-      className={`max-w-80 -z-1`}
+      className={`max-w-80 -z-1 cursor-pointer`}
       initial={{ opacity: 0, scale: 0.5 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
