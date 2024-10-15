@@ -5,6 +5,9 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button } from "./button";
 import { WhatsappLogo } from "phosphor-react";
+
+import { DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog } from "@radix-ui/react-dialog";
 export interface Props {
   imovelId: string;
 }
@@ -28,26 +31,33 @@ const PublicImovelCard = (props: Props) => {
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
     >
-      <motion.div
-        className="p-2 rounded-md bg-zinc-100 shadow-lg"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-      >
-        <img
-          src={imageStore + imovel?.imageList[0]}
-          className="w-64 h-64 rounded-md"
-        />
-        <h1 className="text-lg text-blue-800 font-bold text-wrap">
-          {imovel?.geral} <br />
-          {imovel?.tipo}
-        </h1>
-        <h2 className="text-lg ">
-          {imovel?.cidade} - {imovel?.estado}
-        </h2>
-        <h3 className="text-md underline">
-          <span className="font-bold mt-2">R$: </span> {imovel?.preco}
-        </h3>
-      </motion.div>
+      <Dialog>
+        <DialogTrigger>
+          <motion.div
+            className="p-2 rounded-md bg-zinc-100 shadow-lg"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <img
+              src={imageStore + imovel?.imageList[0]}
+              className="w-64 h-64 rounded-md"
+            />
+            <h1 className="text-lg text-blue-800 font-bold text-wrap">
+              {imovel?.geral} <br />
+              {imovel?.tipo}
+            </h1>
+            <h2 className="text-lg ">
+              {imovel?.cidade} - {imovel?.estado}
+            </h2>
+            <h3 className="text-md underline">
+              <span className="font-bold mt-2">R$: </span> {imovel?.preco}
+            </h3>
+          </motion.div>
+        </DialogTrigger>
+        <DialogContent className="w-10/12">
+          <p>{imovel?.desc}</p>
+        </DialogContent>
+      </Dialog>
 
       <div className="flex justify-between mt-2">
         <a
