@@ -11,6 +11,7 @@ import { FilterIcon } from "lucide-react";
 import { StatesCombobox } from "@/components/specific/statesCombobox";
 import brazilianStates from "@/assets/states";
 import brazilianCities from "@/assets/cities";
+import ImovelList from "@/components/imovelList";
 
 const home: React.FC = () => {
   const [generalFilter, setGeneralFilter] = useState<string | undefined>(
@@ -97,6 +98,8 @@ const home: React.FC = () => {
           {generalFilter ? ` ${generalFilter} ` : " "}
           {typeFilter}
         </h2>
+
+        <ImovelList></ImovelList>
       </section>
     </div>
   );

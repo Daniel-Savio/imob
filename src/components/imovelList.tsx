@@ -1,11 +1,10 @@
 import { Imovel } from "@/schemas/imovelScheema";
 import axios from "axios";
-
 import { useEffect, useState } from "react";
-import ImovelCard from "./ui/imovelCard";
 import { apiUrl } from "@/utils";
+import PublicImovelCard from "./ui/publicImovelCard";
 
-export default function AdminImovelList() {
+export default function ImovelList() {
   const [list, setList] = useState<Imovel[] | undefined>();
 
   useEffect(() => {
@@ -16,13 +15,13 @@ export default function AdminImovelList() {
     }
     setTimeout(() => {
       getList();
-    }, 800);
+    }, 500);
   }, []);
 
   return (
     <div className="flex flex-wrap w-full p-4 -z-1 justify-center gap-10">
       {list?.map((imovel) => {
-        return <ImovelCard imovelId={imovel.id} />;
+        return <PublicImovelCard imovelId={imovel.id} />;
       })}
     </div>
   );
