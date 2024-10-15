@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Dialog } from "@radix-ui/react-dialog";
 import { Plus } from "phosphor-react";
-import { createContext, useState } from "react";
-import { toast } from "sonner";
+import { createContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export interface adminState {
   state: boolean;
@@ -13,14 +13,22 @@ export interface adminState {
 }
 
 export default function Admin() {
+  const navigate = useNavigate();
   const [addedImovelState, setAddedImovelState] = useState<boolean>();
+
+  useEffect(() => {
+    if (window.localStorage.getItem("id") !== "Daniel Pinheiro") {
+      console.log("user not indentified");
+      navigate("/");
+    }
+  }, []);
+
   const AddedImovelContext = createContext({
     addedImovelState,
     setAddedImovelState,
   });
 
   if (addedImovelState) {
-    toast("Imovel adicionado com sucesso!");
     setAddedImovelState(false);
   }
 

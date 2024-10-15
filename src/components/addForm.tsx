@@ -22,7 +22,8 @@ import { Mailbox } from "lucide-react";
 
 import addSchema from "@/schemas/addFormSchema";
 import submitImovelSchema from "@/schemas/submitImovelSchema";
-
+import { apiUrl } from "@/utils";
+import { toast } from "sonner";
 export interface AddedImovelType {
   addedImovelState: (state: boolean) => void;
 }
@@ -73,6 +74,7 @@ export default function AddForm({ addedImovelState }: AddedImovelType) {
 
   async function onSubmit(formData: AddFormInputs) {
     const newFileNames: string[] = [];
+
     formData.imagens.forEach((imagem: File) => {
       const extensao = imagem.name.match(/\.\w+$/); //A interrogação é apenas para confirmar que o objeto não irá ser nulo
       const newName = `${createId()}${extensao?.at(0)}`;
@@ -93,10 +95,7 @@ export default function AddForm({ addedImovelState }: AddedImovelType) {
       tipo: formData.tipo,
     };
 
-    const response = axios.post(
-      "http://localhost:3030/upload",
-      submitData.imagens
-    );
+    const response = axios.post(apiUrl + "upload", submitData.imagens);
     const sendImageLinks: string[] = (await response).data;
     let index = 0;
     console.log(sendImageLinks[index]);
@@ -105,11 +104,11 @@ export default function AddForm({ addedImovelState }: AddedImovelType) {
       index++;
     });
 
-    const imovelSubmited = await axios.post(
-      "http://localhost:3030/imovel",
-      submitData
-    );
-    if (imovelSubmited) addedImovelState(true);
+    const imovelSubmited = await axios.post(apiUrl + "imovel", submitData);
+    if (imovelSubmited) {
+      addedImovelState(true);
+      toast("Imovel adicionado com sucesso");
+    }
   }
 
   return (

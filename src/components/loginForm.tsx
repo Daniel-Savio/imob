@@ -1,10 +1,13 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { Envelope, LockKey } from "phosphor-react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "./ui/button";
+import { user } from "@/utils";
+import { toast } from "sonner";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "E-mail inválido" }),
@@ -21,9 +24,20 @@ export default function loginForm() {
   } = useForm<LoginFormInputs>({
     resolver: zodResolver(loginSchema),
   });
-
+  const navigate = useNavigate();
   const onSubmit = (data: LoginFormInputs) => {
-    console.log(data);
+    if (data.email === user.email && data.password === user.password) {
+      toast("Acesso permitido. Bem vindo Daniel Pinheiro");
+      setTimeout(() => {
+        window.localStorage.setItem("id", "Daniel Pinheiro");
+        navigate("/admin");
+      }, 1000);
+    } else {
+      toast("Acesso negado");
+      setTimeout(() => {
+        navigate("/");
+      }, 500);
+    }
   };
 
   return (
@@ -74,14 +88,13 @@ export default function loginForm() {
             <span className="text-red-600">{errors.password.message}</span>
           )}
         </div>
-        <Link to="/admin">
-          <button
-            className="p-2 rounded-sm mt-4 bg-blue-500 font-semibold text-zinc-50"
-            type="submit"
-          >
-            Login
-          </button>
-        </Link>
+
+        <Button
+          className="p-2 rounded-sm mt-4 bg-blue-500 font-semibold text-zinc-50"
+          type="submit"
+        >
+          Login
+        </Button>
       </form>
     </div>
   );

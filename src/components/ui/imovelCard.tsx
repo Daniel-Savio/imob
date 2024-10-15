@@ -1,35 +1,49 @@
 import { Imovel } from "@/schemas/imovelScheema";
+import { apiUrl, imageStore } from "@/utils";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Button } from "./button";
+import { toast } from "sonner";
+import { PencilSimple, TrashSimple } from "phosphor-react";
 export interface Props {
   imovelId: string;
 }
 
 const ImovelCard = (props: Props) => {
   const [imovel, setImovel] = useState<Imovel | undefined>(undefined);
+  const [visible, setVisible] = useState<number>(1);
 
   useEffect(() => {
     async function getImovel() {
-      const imovelUrl = "http://localhost:3030/" + props.imovelId;
+      const imovelUrl = apiUrl + props.imovelId;
       const imovelData: Imovel = (await axios.get(imovelUrl)).data;
       setImovel(imovelData);
     }
     getImovel();
   }, []);
 
+  async function deleteImovel() {
+    const deletedMessage = (await axios.delete(apiUrl + props.imovelId)).data;
+    setVisible(0);
+
+    toast(deletedMessage);
+  }
+
   return (
     <motion.div
-      className="max-w-80 -z-1"
+      className={`max-w-80 -z-1`}
       initial={{ opacity: 0, scale: 0.5 }}
-      animate={{ opacity: 1, scale: 1 }}
+      animate={{ opacity: visible, scale: visible }}
       transition={{ duration: 0.3 }}
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.9 }}
     >
-      <div className="p-2 rounded-md bg-zinc-100 shadow-lg">
+      <motion.div
+        className="p-2 rounded-md bg-zinc-100 shadow-lg"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+      >
         <img
-          src={"https://danielpinheiro-corretor.store/" + imovel?.imageList[0]}
+          src={imageStore + imovel?.imageList[0]}
           className="w-64 h-64 rounded-md"
         />
         <h1 className="text-lg text-blue-800 font-bold text-wrap">
@@ -42,20 +56,23 @@ const ImovelCard = (props: Props) => {
         <h3 className="text-md underline">
           <span className="font-bold mt-2">R$: </span> {imovel?.preco}
         </h3>
-      </div>
+      </motion.div>
       <div className="flex justify-between mt-2">
-        <button
+        <Button
           type="button"
-          className="px-3 py-1 bg-blue-700 text-slate-50 rounded-md"
+          className="px-3 py-1 bg-blue-700 text-slate-50 rounded-md gap-2"
         >
+          <PencilSimple size={16} />
           Editar
-        </button>
-        <button
-          type="button"
-          className="px-3 py-1 bg-red-700 text-slate-50 rounded-md"
+        </Button>
+        <Button
+          variant={"destructive"}
+          onClick={deleteImovel}
+          className="px-3 py-1 bg-red-700 text-slate-50 rounded-md gap-2"
         >
+          <TrashSimple size={16} />
           Apagar
-        </button>
+        </Button>
       </div>
     </motion.div>
   );

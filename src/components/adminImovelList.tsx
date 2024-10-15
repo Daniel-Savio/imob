@@ -16,7 +16,7 @@ export default function AdminImovelList() {
     }
     setTimeout(() => {
       getList();
-    }, 1000);
+    }, 800);
   }, []);
 
   return (
