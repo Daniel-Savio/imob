@@ -32,13 +32,13 @@ const ImovelCard = (props: Props) => {
 
   return (
     <motion.div
-      className={`max-w-80 -z-1`}
+      className={`max-w-80 -z-10`}
       initial={{ opacity: 0, scale: 0.5 }}
       animate={{ opacity: visible, scale: visible }}
       transition={{ duration: 0.3 }}
     >
       <motion.div
-        className="p-2 rounded-md bg-zinc-100 shadow-lg"
+        className="p-2 rounded-md bg-zinc-100 shadow-lg text-left"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
       >

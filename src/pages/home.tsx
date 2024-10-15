@@ -31,10 +31,10 @@ const home: React.FC = () => {
   }, [stateFilter]);
 
   return (
-    <div className=" text-zinc-600 h-screen bg-gradient-to-tl from-blue-300 to-zinc-50  pt-20 px-2 flex flex-col items-center">
-      <div className="absolute bottom-10 md:right-24  ">
+    <div className=" text-zinc-600 h-screen bg-zinc-100 pt-20 px-2 flex flex-col items-center">
+      <div className="absolute bottom-10 md:right-24 z-10  ">
         <Popover>
-          <PopoverTrigger className="p-2 rounded-full bg-blue-700 flex justify-center md:w-[90px] items-center">
+          <PopoverTrigger className="p-2 rounded-full bg-blue-700 flex justify-center md:w-[90px] items-center z-1">
             <FilterIcon className="text-zinc-50 md:size-8"></FilterIcon>
           </PopoverTrigger>
 
@@ -86,7 +86,7 @@ const home: React.FC = () => {
         </Popover>
       </div>
 
-      <section className="text-left w-full mt-8">
+      <section className="text-left w-full mt-8 overflow-scroll">
         <h1 className="text-xl text-left ">
           Imóveis em:
           <strong className="font-bold">
