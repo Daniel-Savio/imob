@@ -19,7 +19,7 @@ export default function ImovelList() {
   }, []);
 
   return (
-    <div className="flex flex-wrap p-4 justify-center gap-8 ">
+    <div className="flex flex-wrap p-4 justify-center gap-8 h-full ">
       {list?.map((imovel) => {
         return <PublicImovelCard key={imovel.id} imovelId={imovel.id} />;
       })}

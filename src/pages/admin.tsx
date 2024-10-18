@@ -39,7 +39,7 @@ export default function Admin() {
     <AddedImovelContext.Provider
       value={{ addedImovelState, setAddedImovelState }}
     >
-      <div className="bg-gradient-to-tl from-blue-300 to-zinc-50 flex flex-col gap-10 items-center w-full m- min-h-screen p-3 text-zinc-600">
+      <div className="bg-gradient-to-tl from-blue-300 to-zinc-50 flex flex-col  items-center w-full min-h-screen p-3 text-zinc-600">
         <h1 className="text-3xl text-blue-500 mt-10 font-bold">Admin</h1>
         <motion.div
           animate={isOpen ? "open" : "closed"}
@@ -66,7 +66,7 @@ export default function Admin() {
           onClick={() => {
             setisOpen(!isOpen);
           }}
-          className=" fixed bottom-10 p-2 bg-blue-600 text-slate-50 rounded-full cursor-pointer"
+          className=" fixed bottom-16 p-2 bg-blue-600 text-slate-50 rounded-full cursor-pointer"
         >
           <Plus size={32} weight="bold" />
         </div>

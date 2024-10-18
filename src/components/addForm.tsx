@@ -97,8 +97,10 @@ export default function AddForm({ addedImovelState }: AddedImovelType) {
 
     const response = axios.post(apiUrl + "upload", submitData.imagens);
     const sendImageLinks: string[] = (await response).data;
+
     let index = 0;
     console.log(sendImageLinks[index]);
+
     sendImageLinks.forEach(async (link) => {
       await axios.put(link, formData.imagens[index]);
       index++;

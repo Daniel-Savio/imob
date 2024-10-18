@@ -21,9 +21,13 @@ export default function AdminImovelList() {
   }, []);
 
   return (
-    <div>
+    <div className="z-20 block">
       {list?.map((imovel) => {
-        return <ImovelCard key={imovel.id} imovelId={imovel.id} />;
+        return (
+          <div className="m-2">
+            <ImovelCard key={imovel.id} imovelId={imovel.id} />;
+          </div>
+        );
       })}
     </div>
   );

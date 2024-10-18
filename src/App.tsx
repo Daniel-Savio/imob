@@ -9,6 +9,7 @@ import Home from "./pages/home";
 import About from "./pages/locked";
 import { Tabs, TabsList, TabsTrigger } from "./components/ui/tabs";
 import Admin from "./pages/admin";
+import { Separator } from "./components/ui/separator";
 
 function App() {
   return (
@@ -42,6 +43,19 @@ function App() {
         <Route path="/locked" element={<About />} />
         <Route path="/admin" element={<Admin />} />
       </Routes>
+
+      <footer className=" px-2 bg-blue-600 w-screen gap-2 text-slate-50 flex md:justify-center sm:justify-around">
+        <p className="text-sm text-center">
+          Todos os Direitos Reservados para <br />
+          Daniel Pinheiro
+        </p>
+        <Separator orientation="vertical"></Separator>
+        <p className="text-sm text-center">
+          Daniel Pinheiro da Silva
+          <br />
+          CRECI: 237714
+        </p>
+      </footer>
     </BrowserRouter>
   );
 }

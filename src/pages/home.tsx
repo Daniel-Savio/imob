@@ -31,7 +31,7 @@ const home: React.FC = () => {
   }, [stateFilter]);
 
   return (
-    <div className=" text-zinc-600 h-screen bg-zinc-100 pt-20 px-2 flex flex-col items-center">
+    <div className=" text-zinc-600 h-screen bg-[url('https://img.freepik.com/vetores-gratis/estilo-de-fundo-branco-textura-elegante_23-2148432200.jpg?w=1380&t=st=1729217077~exp=1729217677~hmac=ede31c1c617b859ed0a00cafed97fdd527c1d1fcf7908cf75a41b29d2206ef2f')] bg-cover pt-20 px-2 flex flex-col items-center">
       <div className="absolute bottom-10 md:right-24 z-10  ">
         <Popover>
           <PopoverTrigger className="p-2 rounded-full bg-blue-700 flex justify-center md:w-[90px] items-center z-1">
@@ -86,19 +86,8 @@ const home: React.FC = () => {
         </Popover>
       </div>
 
-      <section className="text-left w-full mt-8 overflow-scroll">
-        <h1 className="text-xl text-left ">
-          Imóveis em:
-          <strong className="font-bold">
-            {cityFilter ? " " + cityFilter : " Selecione uma localidade"}
-          </strong>{" "}
-        </h1>
-        <h2 className="text-lg flex">
-          <strong className="font-bold mr-4"> Filtros: </strong>
-          {generalFilter ? ` ${generalFilter} ` : " "}
-          {typeFilter}
-        </h2>
-
+      <h1 className="text-2xl font-bold">Daniel Pinheiro Corretagem</h1>
+      <section className="flex flex-col text-center justify-center w-full mt-8 mb-5 overflow-scroll">
         <ImovelList></ImovelList>
       </section>
     </div>

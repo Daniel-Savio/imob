@@ -12,8 +12,13 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Dialog } from "@radix-ui/react-dialog";
+import { Separator } from "./separator";
 export interface Props {
   imovelId: string;
 }
@@ -61,12 +66,13 @@ const PublicImovelCard = (props: Props) => {
           </motion.div>
         </DialogTrigger>
 
-        <DialogContent className="w-10/12 flex flex-row justify-center p-4">
-          <Carousel className="max-w-full">
-            <CarouselContent>
+        <DialogContent className="max-w-[400px] max-h-[750px] justify-center gap-2 p-4 rounded-sm">
+          <DialogTitle>{imovel?.tipo}</DialogTitle>
+          <Carousel className="max-w-96 border-blue-500 border-solid border-2 rounded-sm bg-slate-100">
+            <CarouselContent className="">
               {imovel?.imageList.map((image) => {
                 return (
-                  <CarouselItem>
+                  <CarouselItem className="flex justify-center ">
                     <img src={imageStore + image} alt="" />
                   </CarouselItem>
                 );
@@ -75,6 +81,24 @@ const PublicImovelCard = (props: Props) => {
             <CarouselPrevious />
             <CarouselNext />
           </Carousel>
+          <h1 className="text-lg">R${imovel?.preco}</h1>
+          <div>
+            <h1 className="text-md">
+              {imovel?.cidade}, {imovel?.estado}
+            </h1>
+            <h1 className="text-md">
+              {imovel?.logradouro} - {imovel?.bairro}
+            </h1>
+          </div>
+
+          <Separator />
+          <h1 className="text-lg max-h-64 overflow-y-auto">Descrição</h1>
+          <div className="shadow-md rounded-md">{imovel?.desc}</div>
+          <br />
+          <Button className="px-3 py-1 bg-green-700 text-slate-50 rounded-md gap-2">
+            <WhatsappLogo size={16} />
+            Falar com o corretor
+          </Button>
         </DialogContent>
       </Dialog>
 
