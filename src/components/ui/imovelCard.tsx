@@ -13,7 +13,7 @@ export interface Props {
 const ImovelCard = (props: Props) => {
   const [imovel, setImovel] = useState<Imovel | undefined>(undefined);
   const [visible, setVisible] = useState<number>(1);
-
+  console.log(visible);
   useEffect(() => {
     async function getImovel() {
       const imovelUrl = apiUrl + props.imovelId;
@@ -33,8 +33,7 @@ const ImovelCard = (props: Props) => {
   return (
     <motion.div
       className={`max-w-80 -z-10`}
-      initial={{ opacity: 0, scale: 0.5 }}
-      animate={{ opacity: visible, scale: visible }}
+      animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
     >
       <motion.div

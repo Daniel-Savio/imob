@@ -13,16 +13,17 @@ export default function AdminImovelList() {
       const listData: Imovel[] = (await axios.get(apiUrl)).data;
 
       setList(listData);
+      console.log(listData);
     }
     setTimeout(() => {
       getList();
-    }, 800);
+    });
   }, []);
 
   return (
-    <div className="flex flex-wrap w-full p-4 -z-1 justify-center gap-10">
+    <div>
       {list?.map((imovel) => {
-        return <ImovelCard imovelId={imovel.id} />;
+        return <ImovelCard key={imovel.id} imovelId={imovel.id} />;
       })}
     </div>
   );

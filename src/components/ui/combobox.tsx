@@ -56,16 +56,17 @@ export function Combobox({
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="w-[200px] p-0 z-50">
         <Command>
           <CommandInput placeholder="Pesquisar" />
           <CommandList>
             <CommandEmpty>No list found.</CommandEmpty>
-            <CommandGroup>
+            <CommandGroup className="z-50">
               {list.map((item) => (
                 <CommandItem
                   key={item}
                   value={item}
+                  className="cursor-pointer z-50"
                   onSelect={(currentValue) => {
                     setValue(currentValue);
                     setOpen(false);
@@ -73,7 +74,7 @@ export function Combobox({
                 >
                   <Check
                     className={cn(
-                      "mr-2 h-4 w-4",
+                      "mr-2 h-4 w-4 cursor-p",
                       item === selectedValue ? "opacity-100" : "opacity-0"
                     )}
                   />

@@ -112,11 +112,11 @@ export default function AddForm({ addedImovelState }: AddedImovelType) {
   }
 
   return (
-    <div className="text-zinc-600 w-full">
+    <div className="text-zinc-600 w-full ">
       <form
         action="submit"
         onSubmit={handleSubmit(onSubmit)}
-        className="items-center w-full text-center md:text-left overflow-auto max-h-[800px]"
+        className="items-center w-full text-center md:text-left overflow-auto h-[600px]"
       >
         <div className="gap-2 flex flex-col  w-full justify-around md:items-start md:block ">
           <fieldset className="border-t-2 border-blue-500 flex flex-col gap-2  p-2 items-center w-full md:items-start">

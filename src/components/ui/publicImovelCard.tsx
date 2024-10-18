@@ -5,7 +5,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button } from "./button";
 import { WhatsappLogo } from "phosphor-react";
-
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import { DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Dialog } from "@radix-ui/react-dialog";
 export interface Props {
@@ -54,8 +60,21 @@ const PublicImovelCard = (props: Props) => {
             </h3>
           </motion.div>
         </DialogTrigger>
-        <DialogContent className="w-10/12">
-          <p>{imovel?.desc}</p>
+
+        <DialogContent className="w-10/12 flex flex-row justify-center p-4">
+          <Carousel className="max-w-full">
+            <CarouselContent>
+              {imovel?.imageList.map((image) => {
+                return (
+                  <CarouselItem>
+                    <img src={imageStore + image} alt="" />
+                  </CarouselItem>
+                );
+              })}
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
+          </Carousel>
         </DialogContent>
       </Dialog>
 
