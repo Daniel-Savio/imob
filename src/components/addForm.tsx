@@ -24,6 +24,7 @@ import addSchema from "@/schemas/addFormSchema";
 import submitImovelSchema from "@/schemas/submitImovelSchema";
 import { apiUrl } from "@/utils";
 import { toast } from "sonner";
+import { setTimeout } from "timers";
 export interface AddedImovelType {
   addedImovelState: (state: boolean) => void;
 }
@@ -98,13 +99,12 @@ export default function AddForm({ addedImovelState }: AddedImovelType) {
     const response = axios.post(apiUrl + "upload", submitData.imagens);
     const sendImageLinks: string[] = (await response).data;
 
-    let index = 0;
-    console.log(sendImageLinks[index]);
-
-    sendImageLinks.forEach(async (link) => {
-      await axios.put(link, formData.imagens[index]);
-      index++;
-    });
+    for (let i = 0; i < sendImageLinks.length; i++) {
+      console.log("Enviando imagem para a cloud store  " + formData.imagens[i]);
+      setTimeout(async () => {
+        await axios.put(sendImageLinks[i], formData.imagens[i]);
+      }, 500);
+    }
 
     const imovelSubmited = await axios.post(apiUrl + "imovel", submitData);
     if (imovelSubmited) {

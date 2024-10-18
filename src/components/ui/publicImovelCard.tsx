@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dialog";
 import { Dialog } from "@radix-ui/react-dialog";
 import { Separator } from "./separator";
+import { ScrollArea, ScrollBar } from "./scroll-area";
 export interface Props {
   imovelId: string;
 }
@@ -68,7 +69,7 @@ const PublicImovelCard = (props: Props) => {
 
         <DialogContent className="max-w-[400px] max-h-[750px] justify-center gap-2 p-4 rounded-sm">
           <DialogTitle>{imovel?.tipo}</DialogTitle>
-          <Carousel className="max-w-96 border-blue-500 border-solid border-2 rounded-sm bg-slate-100">
+          <Carousel className="max-w-72 rounded-sm bg-slate-100 m-auto">
             <CarouselContent className="">
               {imovel?.imageList.map((image) => {
                 return (
@@ -90,15 +91,19 @@ const PublicImovelCard = (props: Props) => {
               {imovel?.logradouro} - {imovel?.bairro}
             </h1>
           </div>
-
-          <Separator />
-          <h1 className="text-lg max-h-64 overflow-y-auto">Descrição</h1>
-          <div className="shadow-md rounded-md">{imovel?.desc}</div>
-          <br />
-          <Button className="px-3 py-1 bg-green-700 text-slate-50 rounded-md gap-2">
-            <WhatsappLogo size={16} />
-            Falar com o corretor
-          </Button>
+          <ScrollArea className="overflow-y-auto">
+            <Separator />
+            <h1 className="text-lg  ">Descrição</h1>
+            <ScrollArea className="shadow-md rounded-md max-h-56 overflow-y-auto">
+              {imovel?.desc}
+              <ScrollBar></ScrollBar>
+            </ScrollArea>
+            <br />
+            <Button className="px-3 py-1 bg-green-700 text-slate-50 rounded-md gap-2">
+              <WhatsappLogo size={16} />
+              Falar com o corretor
+            </Button>
+          </ScrollArea>
         </DialogContent>
       </Dialog>
 
