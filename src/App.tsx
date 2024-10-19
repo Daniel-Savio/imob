@@ -37,14 +37,15 @@ function App() {
           </TabsList>
         </Tabs>
       </header>
+      <section>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/locked" element={<About />} />
+          <Route path="/admin" element={<Admin />} />
+        </Routes>
+      </section>
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/locked" element={<About />} />
-        <Route path="/admin" element={<Admin />} />
-      </Routes>
-
-      <footer className=" px-2 bg-blue-600 w-screen gap-2 text-slate-50 flex md:justify-center sm:justify-around">
+      <footer className=" fixed bottom-0 px-2 bg-blue-600 w-screen gap-2 text-slate-50 flex md:justify-center sm:justify-around">
         <p className="text-sm text-center">
           Todos os Direitos Reservados para <br />
           Daniel Pinheiro

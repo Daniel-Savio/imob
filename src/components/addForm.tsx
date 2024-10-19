@@ -19,12 +19,11 @@ import {
   FloppyDisk,
 } from "phosphor-react";
 import { Mailbox } from "lucide-react";
-
 import addSchema from "@/schemas/addFormSchema";
 import submitImovelSchema from "@/schemas/submitImovelSchema";
 import { apiUrl } from "@/utils";
 import { toast } from "sonner";
-import { setTimeout } from "timers";
+
 export interface AddedImovelType {
   addedImovelState: (state: boolean) => void;
 }
@@ -100,10 +99,11 @@ export default function AddForm({ addedImovelState }: AddedImovelType) {
     const sendImageLinks: string[] = (await response).data;
 
     for (let i = 0; i < sendImageLinks.length; i++) {
-      console.log("Enviando imagem para a cloud store  " + formData.imagens[i]);
-      setTimeout(async () => {
-        await axios.put(sendImageLinks[i], formData.imagens[i]);
-      }, 500);
+      await axios.put(sendImageLinks[i], formData.imagens[i], {
+        headers: {
+          "Content-Type": formData.imagens[i].type, // Configura o Content-Type adequado
+        },
+      });
     }
 
     const imovelSubmited = await axios.post(apiUrl + "imovel", submitData);

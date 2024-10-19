@@ -4,6 +4,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import ImovelCard from "./ui/imovelCard";
 import { apiUrl } from "@/utils";
+import { ScrollArea } from "@radix-ui/react-scroll-area";
 
 export default function AdminImovelList() {
   const [list, setList] = useState<Imovel[] | undefined>();
@@ -13,7 +14,6 @@ export default function AdminImovelList() {
       const listData: Imovel[] = (await axios.get(apiUrl)).data;
 
       setList(listData);
-      console.log(listData);
     }
     setTimeout(() => {
       getList();
@@ -21,14 +21,14 @@ export default function AdminImovelList() {
   }, []);
 
   return (
-    <div className="z-20 block">
+    <ScrollArea className="flex flex-wrap justify-center max-h-screen overflow-y-scroll w-full pb-72">
       {list?.map((imovel) => {
         return (
           <div className="m-2">
-            <ImovelCard key={imovel.id} imovelId={imovel.id} />;
+            <ImovelCard key={imovel.id} imovelId={imovel.id} />
           </div>
         );
       })}
-    </div>
+    </ScrollArea>
   );
 }

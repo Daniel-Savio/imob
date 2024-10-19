@@ -10,7 +10,6 @@ export default function ImovelList() {
   useEffect(() => {
     async function getList() {
       const listData: Imovel[] = (await axios.get(apiUrl)).data;
-
       setList(listData);
     }
     setTimeout(() => {
@@ -19,7 +18,7 @@ export default function ImovelList() {
   }, []);
 
   return (
-    <div className="flex flex-wrap p-4 justify-center gap-8 h-full ">
+    <div className="flex flex-wrap p-4 pb-72 justify-center gap-8 h-full overflow-y-scroll">
       {list?.map((imovel) => {
         return <PublicImovelCard key={imovel.id} imovelId={imovel.id} />;
       })}

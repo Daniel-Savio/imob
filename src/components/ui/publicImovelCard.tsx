@@ -44,7 +44,7 @@ const PublicImovelCard = (props: Props) => {
       transition={{ duration: 0.3 }}
     >
       <Dialog>
-        <DialogTrigger>
+        <DialogTrigger className="text-left">
           <motion.div
             className="p-2 rounded-md bg-zinc-100 shadow-lg"
             whileHover={{ scale: 1.1 }}

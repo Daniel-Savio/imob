@@ -13,7 +13,11 @@ export interface Props {
 const ImovelCard = (props: Props) => {
   const [imovel, setImovel] = useState<Imovel | undefined>(undefined);
   const [visible, setVisible] = useState<number>(1);
-  console.log(visible);
+  const variants = {
+    normal: { scale: 1, opacity: 1 },
+    deleted: { display: "none", scale: 0 },
+  };
+
   useEffect(() => {
     async function getImovel() {
       const imovelUrl = apiUrl + props.imovelId;
@@ -21,7 +25,7 @@ const ImovelCard = (props: Props) => {
       setImovel(imovelData);
     }
     getImovel();
-  }, []);
+  }, [visible]);
 
   async function deleteImovel() {
     const deletedMessage = (await axios.delete(apiUrl + props.imovelId)).data;
@@ -33,7 +37,8 @@ const ImovelCard = (props: Props) => {
   return (
     <motion.div
       className={`max-w-80 -z-10`}
-      animate={{ opacity: 1, scale: 1 }}
+      animate={visible ? "normal" : "deleted"}
+      variants={variants}
       transition={{ duration: 0.3 }}
     >
       <motion.div
