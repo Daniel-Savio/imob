@@ -5,7 +5,9 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button } from "./button";
 import { toast } from "sonner";
-import { PencilSimple, TrashSimple } from "phosphor-react";
+import { TrashSimple } from "phosphor-react";
+import { Badge } from "./badge";
+import { Separator } from "./separator";
 export interface Props {
   imovelId: string;
 }
@@ -25,7 +27,7 @@ const ImovelCard = (props: Props) => {
       setImovel(imovelData);
     }
     getImovel();
-  }, [visible]);
+  });
 
   async function deleteImovel() {
     const deletedMessage = (await axios.delete(apiUrl + props.imovelId)).data;
@@ -41,15 +43,20 @@ const ImovelCard = (props: Props) => {
       variants={variants}
       transition={{ duration: 0.3 }}
     >
-      <motion.div
-        className="p-2 rounded-md bg-zinc-100 shadow-lg text-left"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-      >
+      <motion.div className="relative p-2 rounded-md bg-zinc-100 shadow-lg text-left">
         <img
           src={imageStore + imovel?.imageList[0]}
-          className="w-64 h-64 rounded-md"
+          className="w-64 h-64 rounded-md m-auto"
         />
+        <Separator className="m-2"></Separator>
+        <div className="flex justify-between ">
+          <Badge variant="outline" className="text-xs text-slate-500">
+            {imovel?.id}
+          </Badge>
+          <Badge variant="outline" className="text-xs text-slate-500">
+            {imovel?.updatedAt.slice(0, 10)}
+          </Badge>
+        </div>
         <h1 className="text-lg text-blue-800 font-bold text-wrap">
           {imovel?.geral} <br />
           {imovel?.tipo}
@@ -61,14 +68,14 @@ const ImovelCard = (props: Props) => {
           <span className="font-bold mt-2">R$: </span> {imovel?.preco}
         </h3>
       </motion.div>
-      <div className="flex justify-between mt-2">
-        <Button
+      <div className="flex justify-center mt-2">
+        {/* <Button
           type="button"
           className="px-3 py-1 bg-blue-700 text-slate-50 rounded-md gap-2"
         >
           <PencilSimple size={16} />
           Editar
-        </Button>
+        </Button> */}
         <Button
           variant={"destructive"}
           onClick={deleteImovel}
