@@ -5,6 +5,7 @@ const submitImovelSchema = z.object({
     preco: z
         .string()
         .regex(/^\d{1,3}(\.\d{3})*(,\d{2})?$/),
+    transaction: z.string().default("Venda"),
     estado: z.string(),
     cidade: z.string(),
     bairro: z.string(),

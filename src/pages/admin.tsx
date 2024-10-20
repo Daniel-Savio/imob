@@ -17,7 +17,7 @@ export default function Admin() {
 
   const variants = {
     open: { scale: 1, opacity: 1 },
-    closed: { display: "none", scale: 0 },
+    closed: { display: "none", y: "100%" },
   };
   useEffect(() => {
     if (window.localStorage.getItem("id") !== "Daniel Pinheiro") {
@@ -31,6 +31,7 @@ export default function Admin() {
   });
 
   if (addedImovelState) {
+    setisOpen(false);
     setAddedImovelState(false);
   }
 
@@ -44,10 +45,7 @@ export default function Admin() {
           animate={isOpen ? "open" : "closed"}
           transition={{ duration: 0.3 }}
           variants={variants}
-          onClick={() => {
-            setisOpen(!isOpen);
-          }}
-          className="absolute top-0 w-full z-50 bg-slate-600 bg-opacity-80 p-2 flex justify-center h-full"
+          className="absolute top-0 w-full z-30 bg-slate-600 bg-opacity-80 p-2 flex justify-center h-full"
         >
           <div className="overflow-visible relative w-10/12 bg-slate-100 p-4 rounded-sm h-[full] m-auto shadow-2xl">
             <div

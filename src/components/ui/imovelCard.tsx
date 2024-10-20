@@ -27,7 +27,7 @@ const ImovelCard = (props: Props) => {
       setImovel(imovelData);
     }
     getImovel();
-  });
+  }, []);
 
   async function deleteImovel() {
     const deletedMessage = (await axios.delete(apiUrl + props.imovelId)).data;
@@ -64,6 +64,7 @@ const ImovelCard = (props: Props) => {
         <h2 className="text-lg ">
           {imovel?.cidade} - {imovel?.estado}
         </h2>
+        <h2 className="font-bold">{imovel?.transaction}</h2>
         <h3 className="text-md underline">
           <span className="font-bold mt-2">R$: </span> {imovel?.preco}
         </h3>

@@ -3,11 +3,9 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { createId } from "@paralleldrive/cuid2";
-
 import brazilianStates from "@/assets/states";
 import brazilianCities from "@/assets/cities";
 import types from "@/assets/types";
-
 import { StatesCombobox } from "./specific/statesCombobox";
 import { Combobox } from "./ui/combobox";
 import { useState, useEffect } from "react";
@@ -23,7 +21,7 @@ import addSchema from "@/schemas/addFormSchema";
 import submitImovelSchema from "@/schemas/submitImovelSchema";
 import { apiUrl } from "@/utils";
 import { toast } from "sonner";
-
+import { OptionSwitch } from "./ui/option-switch";
 export interface AddedImovelType {
   addedImovelState: (state: boolean) => void;
 }
@@ -36,6 +34,7 @@ export default function AddForm({ addedImovelState }: AddedImovelType) {
     undefined
   );
   const [typeFilter, setTypeFilter] = useState<string | undefined>(undefined);
+  const [transaction, setTransaction] = useState<string>("Venda");
 
   type AddFormInputs = z.infer<typeof addSchema>;
   type SubmitImovelType = z.infer<typeof submitImovelSchema>;
@@ -53,12 +52,12 @@ export default function AddForm({ addedImovelState }: AddedImovelType) {
       cep: "12970000",
     },
   });
+
   const files = watch("imagens");
   const correctedCep = watch("cep").replace(/(\d{5})(\d{3})/, "$1-$2");
   const correctedPreco = watch("preco")
     .replace(/\D/g, "")
     .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-
   useEffect(() => {
     let cities = ["Selecione um estado"];
     brazilianCities.estados.forEach((estado) => {
@@ -70,9 +69,18 @@ export default function AddForm({ addedImovelState }: AddedImovelType) {
     setValue("cidade", cityFilter!);
     setValue("tipo", typeFilter!);
     setValue("geral", generalFilter!);
-  }, [stateFilter, cityFilter, typeFilter, generalFilter, setValue]);
+    setValue("transaction", transaction!);
+  }, [
+    stateFilter,
+    cityFilter,
+    typeFilter,
+    generalFilter,
+    setValue,
+    transaction,
+  ]);
 
   async function onSubmit(formData: AddFormInputs) {
+    toast("Adicionando Imóvel");
     const newFileNames: string[] = [];
 
     formData.imagens.forEach((imagem: File) => {
@@ -83,6 +91,7 @@ export default function AddForm({ addedImovelState }: AddedImovelType) {
 
     const submitData: SubmitImovelType = {
       imagens: newFileNames,
+      transaction: formData.transaction,
       bairro: formData.bairro,
       cep: formData.cep,
       cidade: formData.cidade,
@@ -99,18 +108,38 @@ export default function AddForm({ addedImovelState }: AddedImovelType) {
     const sendImageLinks: string[] = (await response).data;
 
     for (let i = 0; i < sendImageLinks.length; i++) {
-      await axios.put(sendImageLinks[i], formData.imagens[i], {
-        headers: {
-          "Content-Type": formData.imagens[i].type, // Configura o Content-Type adequado
-        },
-      });
+      await axios
+        .put(sendImageLinks[i], formData.imagens[i], {
+          headers: {
+            "Content-Type": formData.imagens[i].type, // Configura o Content-Type adequado
+          },
+        })
+        .then(
+          () => {
+            toast(`Fazendo o upload da ${i + 1}° Imagem`);
+          },
+          () => {
+            toast(
+              `Upload da imagem ${i + 1} com problema. Verifique o Storage`
+            );
+          }
+        );
     }
 
-    const imovelSubmited = await axios.post(apiUrl + "imovel", submitData);
-    if (imovelSubmited) {
-      addedImovelState(true);
-      toast("Imovel adicionado com sucesso");
-    }
+    await axios
+      .post(apiUrl + "imovel", submitData)
+      .then(
+        (res) => {
+          toast(res.data);
+        },
+        (res) => {
+          toast("Erro ao adicionar imóvel");
+          console.log(res.response.data);
+        }
+      )
+      .finally(() => {
+        addedImovelState(true);
+      });
   }
 
   return (
@@ -252,6 +281,7 @@ export default function AddForm({ addedImovelState }: AddedImovelType) {
             <legend className="border-solid p-2 text-xl font-bold">
               Geral
             </legend>
+
             <section className="w-full">
               <label htmlFor="" className="font-bold">
                 Fotos
@@ -289,12 +319,37 @@ export default function AddForm({ addedImovelState }: AddedImovelType) {
                 <div className="flex flex-col gap-px overflow-scroll max-h-24">
                   {Array.from(files).map((file) => {
                     return (
-                      <span className="text-sm text-zinc-400">{file.name}</span>
+                      <span key={file.name} className="text-sm text-zinc-400">
+                        {file.name}
+                      </span>
                     );
                   })}
                 </div>
               )}
             </section>
+
+            <section className="w-full">
+              <label htmlFor="" className="font-bold">
+                Venda / Aluguel
+              </label>
+              <div className="border rounded p-2 flex gap-2 items-center w-full bg-zinc-50">
+                <p>Vender</p>
+                <OptionSwitch
+                  onCheckedChange={(checked) => {
+                    checked
+                      ? setTransaction("Aluguel")
+                      : setTransaction("Venda");
+                  }}
+                />
+                <p>Alugar</p>
+              </div>
+              {errors.transaction && (
+                <span className="text-red-500 text-sm">
+                  {errors.transaction.message}
+                </span>
+              )}
+            </section>
+
             <section className="w-full">
               <label htmlFor="" className="font-bold">
                 Preço
@@ -323,7 +378,7 @@ export default function AddForm({ addedImovelState }: AddedImovelType) {
               </label>
               <div className="border rounded flex p-2 items-center justify-center w-full h-fit bg-zinc-50">
                 <textarea
-                  className="h-fit shadow-md"
+                  className="h-fit shadow-md p-2 w-full"
                   cols={30}
                   rows={9}
                   {...register("desc")}

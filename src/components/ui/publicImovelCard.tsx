@@ -61,6 +61,7 @@ const PublicImovelCard = (props: Props) => {
             <h2 className="text-lg ">
               {imovel?.cidade} - {imovel?.estado}
             </h2>
+            <h2 className="font-bold">{imovel?.transaction}</h2>
             <h3 className="text-md underline">
               <span className="font-bold mt-2">R$: </span> {imovel?.preco}
             </h3>
@@ -82,7 +83,9 @@ const PublicImovelCard = (props: Props) => {
             <CarouselPrevious />
             <CarouselNext />
           </Carousel>
-          <h1 className="text-lg">R${imovel?.preco}</h1>
+          <h1 className="text-lg">
+            {imovel?.transaction}: R${imovel?.preco}
+          </h1>
           <div>
             <h1 className="text-md">
               {imovel?.cidade}, {imovel?.estado}
