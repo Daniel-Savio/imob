@@ -2,12 +2,8 @@
 import { Combobox } from "@/components/ui/combobox";
 import types from "../assets/types";
 import React, { useEffect, useState } from "react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { FilterIcon } from "lucide-react";
+import { Popover, PopoverContent } from "@/components/ui/popover";
+// import { FilterIcon } from "lucide-react";
 import { StatesCombobox } from "@/components/specific/statesCombobox";
 import brazilianStates from "@/assets/states";
 import brazilianCities from "@/assets/cities";

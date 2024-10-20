@@ -3,4 +3,7 @@ export const apiUrl: string = "https://imob-api-kzv8.onrender.com/";
 
 export const imageStore: string = "https://danielpinheiro-corretor.store/";
 
-export const user = { email: "eudps@gmail.com", password: "daniel#admin123" };
+export const user = {
+  email: "eudps.corretor@gmail.com",
+  password: "Daniel#admin123",
+};
