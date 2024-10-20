@@ -68,9 +68,9 @@ const PublicImovelCard = (props: Props) => {
           </motion.div>
         </DialogTrigger>
 
-        <DialogContent className="max-w-[400px] max-h-[750px] justify-center gap-2 p-4 rounded-sm">
+        <DialogContent className="w-full sm:max-w-[400px] h-screen sm:max-h-[750px] justify-center gap-2 p-4 rounded-sm">
           <DialogTitle>{imovel?.tipo}</DialogTitle>
-          <Carousel className="max-w-72 rounded-sm bg-slate-100 m-auto">
+          <Carousel className="sm:max-w-72 w-full rounded-sm bg-slate-100 m-auto">
             <CarouselContent className="">
               {imovel?.imageList.map((image) => {
                 return (

@@ -9,20 +9,24 @@ import Home from "./pages/home";
 import About from "./pages/locked";
 import { Tabs, TabsList, TabsTrigger } from "./components/ui/tabs";
 import Admin from "./pages/admin";
-import { Separator } from "./components/ui/separator";
+import { Buildings } from "phosphor-react";
 
 function App() {
   return (
     <BrowserRouter>
       <Toaster />
-      <header className=" fixed top-0 flex p-2 justify-center w-full align-middle text-zinc-600">
-        <Tabs className="relative flex" defaultValue="home">
-          <TabsList className=" flex bg-transparent w-full gap-4 justify-around">
-            <div
-              id="trail"
-              className="absolute -z-10 backdrop-blur-md h-8 bg-white/20 rounded-full px-40 py-5 w-full shadow-lg"
-            ></div>
-
+      <header className=" fixed top-0 flex justify-center w-full align-middle text-zinc-600">
+        <Tabs
+          className="relative block justify-center text-center w-full"
+          defaultValue="home"
+        >
+          <div className="flex gap-2 m-auto w-fit align-bottom">
+            <Buildings className="w-10 h-10 mt-auto ml-2" weight="bold" />
+            <h1 className="flex text-nowrap mt-auto text-xl font-bold">
+              Daniel Pinheiro Corretagem
+            </h1>
+          </div>
+          <TabsList className=" flex bg-transparent w-full gap-4 justify-center">
             <Link to="/">
               <TabsTrigger className="rounded-full  px-5" value="home">
                 <HomeIcon className="h-5 w-fit" />
@@ -44,19 +48,6 @@ function App() {
           <Route path="/admin" element={<Admin />} />
         </Routes>
       </section>
-
-      <footer className=" fixed bottom-0 px-2 bg-blue-600 w-screen gap-2 text-slate-50 flex md:justify-center sm:justify-around">
-        <p className="text-sm text-center">
-          Todos os Direitos Reservados para <br />
-          Daniel Pinheiro
-        </p>
-        <Separator orientation="vertical"></Separator>
-        <p className="text-sm text-center">
-          Daniel Pinheiro da Silva
-          <br />
-          CRECI: 237714
-        </p>
-      </footer>
     </BrowserRouter>
   );
 }

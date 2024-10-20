@@ -81,11 +81,13 @@ const home: React.FC = () => {
           </PopoverContent>
         </Popover>
       </div>
-
-      <h1 className="text-2xl font-bold">Daniel Pinheiro Corretagem</h1>
-      <section className="flex flex-col text-center justify-center w-full mt-8 mb-5 overflow-scroll">
+      <section className="flex flex-col text-center justify-center w-full mt-8  overflow-scroll">
         <ImovelList></ImovelList>
       </section>
+      <footer className="flex flex-col justify-center">
+        <strong className="text-center">CRECI: 237714</strong>
+        <p>All Rights Reserved to: Daniel Pinehiro</p>
+      </footer>
     </div>
   );
 };
