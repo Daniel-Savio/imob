@@ -40,14 +40,14 @@ export default function Admin() {
       value={{ addedImovelState, setAddedImovelState }}
     >
       <div className=" bg-zinc-100 flex flex-col h-screen items-center w-full overflow-hidden p-3 text-zinc-600">
-        <h1 className="text-3xl text-blue-500 mt-10 font-bold">Admin</h1>
+        <h1 className="text-3xl text-blue-500 mt-24 font-bold">Admin</h1>
         <motion.div
           animate={isOpen ? "open" : "closed"}
           transition={{ duration: 0.3 }}
           variants={variants}
-          className="absolute top-0 w-full z-30 bg-slate-600 bg-opacity-80 p-2 flex justify-center h-full"
+          className="absolute top-0 w-full z-30 bg-slate-600 bg-opacity-80 sm:p-2 flex justify-center h-fit sm:h-full"
         >
-          <div className="overflow-visible relative w-10/12 bg-slate-100 p-4 rounded-sm h-[full] m-auto shadow-2xl">
+          <div className="overflow-visible relative w-full h-full sm:h-fit sm:w-10/12 bg-slate-100 p-4 rounded-sm m-auto shadow-2xl">
             <div
               onClick={() => {
                 setisOpen(!isOpen);
