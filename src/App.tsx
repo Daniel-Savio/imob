@@ -20,9 +20,9 @@ function App() {
           className="relative block justify-center text-center w-full"
           defaultValue="home"
         >
-          <div className="flex gap-2 m-auto w-fit align-bottom">
-            <Buildings className="w-10 h-10 mt-auto ml-2" weight="bold" />
-            <h1 className="flex text-nowrap mt-auto text-xl font-bold">
+          <div className="flex gap-2 justify-center bg-zinc-100 py-1 m-auto w-full align-bottom">
+            <Buildings className="w-8 h-8 mt-auto ml-2" weight="regular" />
+            <h1 className="flex text-nowrap mt-auto text-lg">
               Daniel Pinheiro Corretagem
             </h1>
           </div>
