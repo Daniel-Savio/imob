@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button } from "./button";
-import { WhatsappLogo } from "phosphor-react";
+import { WhatsappLogo, Image } from "phosphor-react";
 import {
   Carousel,
   CarouselContent,
@@ -12,6 +12,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { type CarouselApi } from "@/components/ui/carousel";
 import {
   DialogContent,
   DialogTitle,
@@ -26,15 +27,26 @@ export interface Props {
 
 const PublicImovelCard = (props: Props) => {
   const [imovel, setImovel] = useState<Imovel | undefined>(undefined);
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     async function getImovel() {
       const imovelUrl = apiUrl + props.imovelId;
       const imovelData: Imovel = (await axios.get(imovelUrl)).data;
       setImovel(imovelData);
+
+      setCount(api!.scrollSnapList().length);
+      setCurrent(api!.selectedScrollSnap() + 1);
+
+      api!.on("select", () => {
+        setCurrent(api!.selectedScrollSnap() + 1);
+        api!.selectedScrollSnap();
+      });
     }
     getImovel();
-  }, []);
+  }, [api]);
 
   return (
     <motion.div
@@ -68,22 +80,33 @@ const PublicImovelCard = (props: Props) => {
           </motion.div>
         </DialogTrigger>
 
-        <DialogContent className="w-full sm:max-w-[400px] h-screen sm:max-h-[750px] justify-center gap-2 p-4 rounded-sm overflow-y-scroll">
+        <DialogContent className="w-full sm:max-w-[600px] h-[96vh] sm:max-h-[750px] justify-center gap-2 p-4 rounded-sm overflow-y-scroll">
           <DialogTitle>{imovel?.tipo}</DialogTitle>
           <ScrollArea>
-            <Carousel className="sm:max-w-72 w-full rounded-sm bg-slate-100 m-auto">
-              <CarouselContent className="">
+            <Carousel
+              setApi={setApi}
+              className="relative w-full rounded-sm bg-slate-100 m-auto"
+            >
+              <CarouselContent className="  h-fit w-fit max-h-[400px] ">
                 {imovel?.imageList.map((image) => {
                   return (
                     <CarouselItem className="flex justify-center h-fit w-fit">
-                      <img src={imageStore + image} alt="" />
+                      <img
+                        className="max-h-[400px] my-auto"
+                        src={imageStore + image}
+                        alt=""
+                      />
                     </CarouselItem>
                   );
                 })}
               </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
+              <CarouselPrevious className="absolute top-[50%] left-4" />
+              <CarouselNext className="absolute top-[50%] right-4" />
             </Carousel>
+            <div className="flex justify-center text-zinc-500">
+              <Image className="w-6 h-6" />
+              {current} / {count}
+            </div>
             <h1 className="text-lg my-2">
               {imovel?.transaction}: R${imovel?.preco}
             </h1>
@@ -109,7 +132,7 @@ const PublicImovelCard = (props: Props) => {
               className="w-full flex justify-center"
               href={`whatsapp://send?text=Bom dia Daniel. \n Teria interesse no Imóvel em: \n- ${imovel?.cidade} -- ${imovel?.estado} \n- ${imovel?.bairro} \n \n *Id do Imóvel:* \n ${imovel?.id} &phone=+5511941776334`}
             >
-              <Button className="px-3 py-1 bg-green-700 text-slate-50 rounded-md gap-2">
+              <Button className="px-3 py-1 bg-blue-600 text-slate-50 rounded-md gap-2">
                 <WhatsappLogo size={16} />
                 Falar com o vendedor
               </Button>
@@ -123,7 +146,7 @@ const PublicImovelCard = (props: Props) => {
           className="w-full flex justify-center"
           href={`whatsapp://send?text=Bom dia Daniel. \n Teria interesse no Imóvel em: \n- ${imovel?.cidade} -- ${imovel?.estado} \n- ${imovel?.bairro} \n \n *Id do Imóvel:* \n ${imovel?.id} &phone=+5511941776334`}
         >
-          <Button className="px-3 py-1 bg-green-700 text-slate-50 rounded-md gap-2">
+          <Button className="px-3 py-1 bg-blue-600 text-slate-50 rounded-md gap-2">
             <WhatsappLogo size={16} />
             Falar com o vendedor
           </Button>
