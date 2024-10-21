@@ -86,7 +86,7 @@ const home: React.FC = () => {
       </section>
       <footer className="flex flex-col justify-center">
         <strong className="text-center">CRECI: 237714</strong>
-        <p>All Rights Reserved to: Daniel Pinehiro</p>
+        <p>All Rights Reserved to: Daniel Pinheiro</p>
       </footer>
     </div>
   );

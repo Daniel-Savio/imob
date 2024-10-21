@@ -70,42 +70,50 @@ const PublicImovelCard = (props: Props) => {
 
         <DialogContent className="w-full sm:max-w-[400px] h-screen sm:max-h-[750px] justify-center gap-2 p-4 rounded-sm overflow-y-scroll">
           <DialogTitle>{imovel?.tipo}</DialogTitle>
-          <Carousel className="sm:max-w-72 w-full rounded-sm bg-slate-100 m-auto">
-            <CarouselContent className="">
-              {imovel?.imageList.map((image) => {
-                return (
-                  <CarouselItem className="flex justify-center h-fit w-fit">
-                    <img src={imageStore + image} alt="" />
-                  </CarouselItem>
-                );
-              })}
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel>
-          <h1 className="text-lg">
-            {imovel?.transaction}: R${imovel?.preco}
-          </h1>
-          <div>
-            <h1 className="text-md">
-              {imovel?.cidade}, {imovel?.estado}
+          <ScrollArea>
+            <Carousel className="sm:max-w-72 w-full rounded-sm bg-slate-100 m-auto">
+              <CarouselContent className="">
+                {imovel?.imageList.map((image) => {
+                  return (
+                    <CarouselItem className="flex justify-center h-fit w-fit">
+                      <img src={imageStore + image} alt="" />
+                    </CarouselItem>
+                  );
+                })}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
+            <h1 className="text-lg my-2">
+              {imovel?.transaction}: R${imovel?.preco}
             </h1>
-            <h1 className="text-md">
-              {imovel?.logradouro} - {imovel?.bairro}
-            </h1>
-          </div>
-          <ScrollArea className="overflow-y-auto">
+            <div>
+              <h1 className="text-md">
+                {imovel?.cidade}, {imovel?.estado}
+              </h1>
+              <h1 className="text-md">
+                {imovel?.logradouro} - {imovel?.bairro}
+              </h1>
+            </div>
             <Separator />
-            <h1 className="text-lg  ">Descrição</h1>
-            <ScrollArea className="shadow-md rounded-md max-h-56 overflow-y-auto">
-              {imovel?.desc}
-              <ScrollBar></ScrollBar>
+            <br></br>
+            <h1 className="text-lg ">Descrição</h1>
+            <ScrollArea className="shadow-md rounded-md max-h-64 overflow-auto ">
+              <pre className="bg-slate-100 font-sans text-wrap text-justify p-2 ">
+                {imovel?.desc}
+              </pre>
+              <ScrollBar className="w-2" />
             </ScrollArea>
             <br />
-            <Button className="px-3 py-1 bg-green-700 text-slate-50 rounded-md gap-2">
-              <WhatsappLogo size={16} />
-              Falar com o corretor
-            </Button>
+            <a
+              className="w-full flex justify-center"
+              href={`whatsapp://send?text=Bom dia Daniel. \n Teria interesse no Imóvel em: \n- ${imovel?.cidade} -- ${imovel?.estado} \n- ${imovel?.bairro} \n \n *Id do Imóvel:* \n ${imovel?.id} &phone=+5511941776334`}
+            >
+              <Button className="px-3 py-1 bg-green-700 text-slate-50 rounded-md gap-2">
+                <WhatsappLogo size={16} />
+                Falar com o vendedor
+              </Button>
+            </a>
           </ScrollArea>
         </DialogContent>
       </Dialog>
@@ -113,7 +121,7 @@ const PublicImovelCard = (props: Props) => {
       <div className="flex justify-between mt-2">
         <a
           className="w-full flex justify-center"
-          href={`whatsapp://send?text=*Mensagem de teste* \n Bom dia Daniel. Teria interesse no Imóvel em: \n- ${imovel?.cidade} -- ${imovel?.estado} \n- ${imovel?.bairro} \n \n Id do Imóvel: ${imovel?.id} &phone=+5511941776334`}
+          href={`whatsapp://send?text=Bom dia Daniel. \n Teria interesse no Imóvel em: \n- ${imovel?.cidade} -- ${imovel?.estado} \n- ${imovel?.bairro} \n \n *Id do Imóvel:* \n ${imovel?.id} &phone=+5511941776334`}
         >
           <Button className="px-3 py-1 bg-green-700 text-slate-50 rounded-md gap-2">
             <WhatsappLogo size={16} />
