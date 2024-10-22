@@ -67,8 +67,7 @@ const PublicImovelCard = (props: Props) => {
               className="w-64 h-64 rounded-md"
             />
             <h1 className="text-lg text-blue-800 font-bold text-wrap">
-              {imovel?.geral} <br />
-              {imovel?.tipo}
+              {imovel?.titulo}
             </h1>
             <h2 className="text-lg ">
               {imovel?.cidade} - {imovel?.estado}
@@ -81,7 +80,7 @@ const PublicImovelCard = (props: Props) => {
         </DialogTrigger>
 
         <DialogContent className="w-full sm:max-w-[600px] h-[96vh] sm:max-h-[750px] justify-center gap-2 p-4 rounded-sm overflow-y-scroll">
-          <DialogTitle>{imovel?.tipo}</DialogTitle>
+          <DialogTitle className="text-wrap">{imovel?.titulo}</DialogTitle>
           <ScrollArea>
             <Carousel
               setApi={setApi}

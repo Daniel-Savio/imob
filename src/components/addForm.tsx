@@ -15,6 +15,7 @@ import {
   House,
   NumberCircleThree,
   FloppyDisk,
+  Textbox,
 } from "phosphor-react";
 import { Mailbox } from "lucide-react";
 import addSchema from "@/schemas/addFormSchema";
@@ -91,6 +92,7 @@ export default function AddForm({ addedImovelState }: AddedImovelType) {
 
     const submitData: SubmitImovelType = {
       imagens: newFileNames,
+      titulo: formData.titulo,
       transaction: formData.transaction,
       bairro: formData.bairro,
       cep: formData.cep,
@@ -284,8 +286,27 @@ export default function AddForm({ addedImovelState }: AddedImovelType) {
 
             <section className="w-full">
               <label htmlFor="" className="font-bold">
-                Fotos
+                Título do Imovel
               </label>
+              <div className="border rounded p-2 flex gap-2 items-center w-full bg-zinc-50">
+                <Textbox className="size-5 text-zinc-600" />
+                <input
+                  type="text"
+                  placeholder="Nome desejado para aparecer no centro do Card"
+                  className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-full"
+                  {...register("titulo")}
+                />
+              </div>
+
+              {errors.bairro && (
+                <span className="text-red-500 text-sm">
+                  {errors.titulo?.message}
+                </span>
+              )}
+            </section>
+
+            <section className="w-full">
+              <p className="font-bold">Fotos</p>
               <div className="rounded flex gap-2 items-center w-full bg-zinc-50 border-dashed border-zinc-400 border-2">
                 <label
                   htmlFor="image"

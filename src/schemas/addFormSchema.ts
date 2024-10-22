@@ -12,6 +12,7 @@ const addSchema = z.object({
             return fileList;
         }),
     transaction: z.string().default("Venda"),
+    titulo: z.string(),
     preco: z
         .string()
         .min(1, { message: "O imóvel necessita de um preço" })

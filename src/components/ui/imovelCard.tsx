@@ -58,8 +58,7 @@ const ImovelCard = (props: Props) => {
           </Badge>
         </div>
         <h1 className="text-lg text-blue-800 font-bold text-wrap">
-          {imovel?.geral} <br />
-          {imovel?.tipo}
+          {imovel?.titulo}
         </h1>
         <h2 className="text-lg ">
           {imovel?.cidade} - {imovel?.estado}
