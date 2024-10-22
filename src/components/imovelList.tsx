@@ -1,27 +1,48 @@
 import { Imovel } from "@/schemas/imovelScheema";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { apiUrl } from "@/utils";
+import { ScrollArea } from "@radix-ui/react-scroll-area";
+import { Spinner } from "phosphor-react";
 import PublicImovelCard from "./ui/publicImovelCard";
 
-export default function ImovelList() {
-  const [list, setList] = useState<Imovel[] | undefined>();
+// Função para buscar dados
+const fetchImoveis = async () => {
+  const { data } = await axios.get<Imovel[]>(apiUrl);
+  return data;
+};
 
-  useEffect(() => {
-    async function getList() {
-      const listData: Imovel[] = (await axios.get(apiUrl)).data;
-      setList(listData);
-    }
-    setTimeout(() => {
-      getList();
-    }, 500);
-  }, []);
+export default function AdminImovelList() {
+  // Usando o React Query para lidar com a requisição
+  const {
+    data: list,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["imoveis"],
+    queryFn: fetchImoveis,
+  });
+
+  if (isLoading) {
+    return (
+      <>
+        <h1>Carregando imóveis</h1>
+        <Spinner className="animate-spin h-10 w-10 my-24 mx-auto"></Spinner>
+      </>
+    );
+  }
+
+  if (error) {
+    return <div>Erro ao carregar imóveis</div>;
+  }
 
   return (
-    <div className="flex flex-wrap p-4 pb-72 justify-center gap-8 h-full overflow-y-scroll">
-      {list?.map((imovel) => {
-        return <PublicImovelCard key={imovel.id} imovelId={imovel.id} />;
-      })}
-    </div>
+    <ScrollArea className="flex flex-wrap justify-center max-h-screen overflow-y-scroll w-full pb-72">
+      {list?.map((imovel) => (
+        <div key={imovel.id} className="m-2">
+          <PublicImovelCard imovelId={imovel.id} />
+        </div>
+      ))}
+    </ScrollArea>
   );
 }
