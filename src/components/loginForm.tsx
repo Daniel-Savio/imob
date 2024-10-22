@@ -60,7 +60,7 @@ export default function loginForm() {
             <Envelope className="size-5 text-zinc-600" />
             <input
               type="text"
-              placeholder="daniel.savio@treetech.com.br"
+              placeholder="jhondoe@gmail.com"
               className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-56"
               {...register("email")}
             />
