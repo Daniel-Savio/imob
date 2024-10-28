@@ -74,7 +74,7 @@ export default function Home() {
           </h3>
         </div>
         <img
-          className="max-h-[1000px] max-w-[500px] m-auto md:m-0"
+          className="max-h-[800] max-w-[400] md:max-h-[1000px] md:max-w-[500px] m-auto md:m-0"
           src={Building}
           alt=""
         />
