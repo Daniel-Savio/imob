@@ -24,6 +24,10 @@ export const theme = {
       ring: "hsl(var(--ring))",
       background: "hsl(var(--background))",
       foreground: "hsl(var(--foreground))",
+      imobPrimary: "#3161A3",
+      imobSecondary: "#1DAEFF",
+      imobTerciary: "#13ABC4",
+      imobWhite: "#E2FBFF",
       primary: {
         DEFAULT: "hsl(var(--primary))",
         foreground: "hsl(var(--primary-foreground))",
@@ -67,7 +71,7 @@ export const theme = {
 `,
     },
     fontFamily: {
-      sans: ["Inter"],
+      sans: ["Raleway", "Inter"],
       cursive: ["Pacifico"],
     },
     keyframes: {

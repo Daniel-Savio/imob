@@ -64,7 +64,7 @@ const PublicImovelCard = (props: Props) => {
           >
             <img
               src={imageStore + imovel?.imageList[0]}
-              className="w-64 h-64 rounded-md"
+              className="w-64 h-64 rounded-md m-auto"
             />
             <h1 className="text-lg text-blue-800 font-bold text-wrap">
               {imovel?.titulo}

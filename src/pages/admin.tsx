@@ -39,7 +39,7 @@ export default function Admin() {
     <AddedImovelContext.Provider
       value={{ addedImovelState, setAddedImovelState }}
     >
-      <div className="flex flex-col h-screen items-center w-full overflow-hidden p-3 text-zinc-600 bg-[url('https://img.freepik.com/free-photo/artistic-blurry-colorful-wallpaper-background_58702-8161.jpg')] bg-cover">
+      <div className="flex flex-col  items-center w-full overflow-hidden p-3 text-zinc-600">
         <h1 className="text-3xl text-blue-500 mt-24 font-bold">Admin</h1>
         <motion.div
           animate={isOpen ? "open" : "closed"}
