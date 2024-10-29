@@ -21,16 +21,25 @@ import {
 import { Dialog } from "@radix-ui/react-dialog";
 import { Separator } from "./separator";
 import { ScrollArea, ScrollBar } from "./scroll-area";
+import { Trash } from "lucide-react";
+import { toast } from "sonner";
 export interface Props {
   imovelId: string;
+  visible?: "hidden" | "";
 }
 
-const PublicImovelCard = (props: Props) => {
+const ImovelCard = (props: Props) => {
   const [imovel, setImovel] = useState<Imovel | undefined>(undefined);
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [visible, setVisible] = useState<boolean>(true);
+  const variants = {
+    open: { y: 0, opacity: 1 },
+    closed: { display: "none", y: "100%" },
+  };
   useEffect(() => {
     async function getImovel() {
       const imovelUrl = apiUrl + props.imovelId;
@@ -48,39 +57,49 @@ const PublicImovelCard = (props: Props) => {
     getImovel();
   }, [api]);
 
+  async function deleteImovel() {
+    const deletedMessage = (await axios.delete(apiUrl + props.imovelId)).data;
+    setVisible(!visible);
+
+    toast(deletedMessage);
+  }
+
   return (
     <motion.div
       className={`max-w-80 -z-1 cursor-pointer`}
-      initial={{ opacity: 0, scale: 0.5 }}
-      animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
+      animate={visible ? "open" : "closed"}
+      variants={variants}
     >
       <Dialog>
-        <DialogTrigger className="text-left">
+        <DialogTrigger className="text-left max-w-72">
           <motion.div
-            className="p-2 rounded-md bg-zinc-100 shadow-lg"
-            whileHover={{ scale: 1.1 }}
+            className=" rounded-md bg-zinc-100 shadow-lg"
+            whileHover={{ scale: 1.08 }}
             whileTap={{ scale: 0.9 }}
           >
             <img
               src={imageStore + imovel?.imageList[0]}
-              className="w-64 h-64 rounded-md m-auto"
+              className="w-full h-64 rounded-md m-auto"
             />
-            <h1 className="text-lg text-blue-800 font-bold text-wrap">
-              {imovel?.titulo}
-            </h1>
-            <h2 className="text-lg ">
-              {imovel?.cidade} - {imovel?.estado}
-            </h2>
-            <h2 className="font-bold">{imovel?.transaction}</h2>
-            <h3 className="text-md underline">
-              <span className="font-bold mt-2">R$: </span> {imovel?.preco}
-            </h3>
+            <div className="p-2">
+              <h1 className="text-lg text-blue-800 font-bold text-wrap">
+                {imovel?.titulo}
+              </h1>
+              <h2 className="text-lg ">
+                {imovel?.cidade} - {imovel?.estado}
+              </h2>
+              <h2 className="font-bold">{imovel?.transaction}</h2>
+              <h3 className="text-md underline">
+                <span className="font-bold mt-2">R$: </span> {imovel?.preco}
+              </h3>
+            </div>
           </motion.div>
         </DialogTrigger>
 
         <DialogContent className="w-full sm:max-w-[600px] h-[96vh] sm:max-h-[750px] justify-center gap-2 p-4 rounded-sm overflow-y-scroll">
           <DialogTitle className="text-wrap">{imovel?.titulo}</DialogTitle>
+
           <ScrollArea>
             <Carousel
               setApi={setApi}
@@ -89,7 +108,10 @@ const PublicImovelCard = (props: Props) => {
               <CarouselContent className="  h-fit w-fit max-h-[400px] ">
                 {imovel?.imageList.map((image) => {
                   return (
-                    <CarouselItem className="flex justify-center h-fit w-fit">
+                    <CarouselItem
+                      key={image}
+                      className="flex justify-center h-fit w-fit"
+                    >
                       <img
                         className="max-h-[400px] my-auto"
                         src={imageStore + image}
@@ -139,20 +161,25 @@ const PublicImovelCard = (props: Props) => {
           </ScrollArea>
         </DialogContent>
       </Dialog>
-
-      <div className="flex justify-between mt-2">
-        <a
-          className="w-full flex justify-center"
-          href={`whatsapp://send?text=Bom dia Daniel. \n Teria interesse no Imóvel em: \n- ${imovel?.cidade} -- ${imovel?.estado} \n- ${imovel?.bairro} \n \n *Id do Imóvel:* \n ${imovel?.id} &phone=+5511941776334`}
+      <div className={`flex justify-center mt-2 ${props.visible} `}>
+        {/* <Button
+          type="button"
+          className="px-3 py-1 bg-blue-700 text-slate-50 rounded-md gap-2"
         >
-          <Button className="px-3 py-1 bg-blue-600 text-slate-50 rounded-md gap-2">
-            <WhatsappLogo size={16} />
-            Falar com o vendedor
-          </Button>
-        </a>
+          <PencilSimple size={16} />
+          Editar
+        </Button> */}
+        <Button
+          variant={"destructive"}
+          onClick={deleteImovel}
+          className="px-3 py-1 bg-red-700 text-slate-50 rounded-md gap-2"
+        >
+          <Trash className="" />
+          Apagar
+        </Button>
       </div>
     </motion.div>
   );
 };
 
-export default PublicImovelCard;
+export default ImovelCard;

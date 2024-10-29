@@ -133,15 +133,15 @@ export default function AddForm({ addedImovelState }: AddedImovelType) {
       .then(
         (res) => {
           toast(res.data);
+          //window.location.reload();
+          addedImovelState(true);
         },
         (res) => {
           toast("Erro ao adicionar imóvel");
           console.log(res.response.data);
         }
       )
-      .finally(() => {
-        addedImovelState(true);
-      });
+      .finally(() => {});
   }
 
   return (
