@@ -1,20 +1,20 @@
-import AddForm from "@/components/addForm";
+import AddForm from "@/components/forms/addForm";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import ImovelCard from "@/components/ui/imovel-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Imovel } from "@/schemas/imovelScheema";
 import { apiUrl } from "@/utils";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { motion } from "framer-motion";
 import { LoaderCircle } from "lucide-react";
-import { Plus, X } from "phosphor-react";
-import { createContext, useEffect, useState } from "react";
+import { Plus } from "phosphor-react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
-export interface adminState {
-  state: boolean;
-  setAddedImovelState: (state: boolean) => void;
-}
 
 export default function Admin() {
   const fetchImoveis = async () => {
@@ -32,32 +32,16 @@ export default function Admin() {
   });
 
   const navigate = useNavigate();
-  const [addedImovelState, setAddedImovelState] = useState<boolean>();
-  const [isOpen, setisOpen] = useState<boolean | undefined>(false);
 
-  const variants = {
-    open: { scale: 1, opacity: 1 },
-    closed: { display: "none", y: "100%" },
-  };
   useEffect(() => {
     if (window.localStorage.getItem("id") !== "Daniel Pinheiro") {
       navigate("/");
     }
-  }, [addedImovelState]);
-
-  const AddedImovelContext = createContext({
-    addedImovelState,
-    setAddedImovelState,
-  });
-
-  if (addedImovelState) {
-    setisOpen(false);
-    setAddedImovelState(false);
-  }
+  }, []);
 
   if (isLoading) {
     return (
-      <div className="flex flex-col justify-center text-center">
+      <div className="flex justify-center text-center w-full">
         <h1>
           Carregando imóveis <LoaderCircle className="animate-spin" />{" "}
         </h1>
@@ -66,7 +50,7 @@ export default function Admin() {
           <Skeleton className="h-[125px] w-[250px] rounded-xl" />
           <div className="space-y-2">
             <Skeleton className="h-4 w-[250px]" />
-            <Skeleton className="h-4 w-[200px]" />
+            <Skeleton className="h-4 w-[250px]" />
           </div>
         </div>
       </div>
@@ -78,46 +62,24 @@ export default function Admin() {
   }
 
   return (
-    <AddedImovelContext.Provider
-      value={{ addedImovelState, setAddedImovelState }}
-    >
-      <div className="flex flex-col justify-center items-center w-full">
-        <h1 className="text-3xl text-blue-500 mt-24 font-bold">Admin</h1>
-        <motion.div
-          animate={isOpen ? "open" : "closed"}
-          transition={{ duration: 0.3 }}
-          variants={variants}
-          className="absolute -top-10 w-full z-30 bg-slate-600 bg-opacity-80 sm:p-2 flex justify-center h-fit sm:h-full"
-        >
-          <div className="overflow-visible relative w-full h-full sm:h-fit sm:w-10/12 bg-slate-100 p-4 rounded-sm m-auto shadow-2xl">
-            <div
-              onClick={() => {
-                setisOpen(!isOpen);
-              }}
-              className="absolute top-1 right-5 rounded-full bg-blue-600 p-1 shadow-sm cursor-pointer text-slate-50"
-            >
-              <X size={24} />
-            </div>
-            <AddForm addedImovelState={setAddedImovelState}></AddForm>
-          </div>
-        </motion.div>
+    <div className="flex flex-col justify-center items-center w-full">
+      <h1 className="text-3xl text-left w-full font-bold">Admin</h1>
 
-        <div className="flex flex-wrap justify-center items-center gap-5 overflow-y-scroll w-full">
-          {list?.map((imovel) => (
-            <ImovelCard key={imovel.id} imovelId={imovel.id} />
-          ))}
-        </div>
-
-        <motion.div
-          whileHover={{ scale: 1.1 }}
-          onClick={() => {
-            setisOpen(!isOpen);
-          }}
-          className=" fixed z-20 bottom-16 p-2 bg-blue-600 text-slate-50 rounded-full cursor-pointer"
-        >
-          <Plus size={32} weight="bold" />
-        </motion.div>
+      <div className="flex flex-wrap justify-center items-center gap-5 overflow-y-scroll w-full">
+        {list?.map((imovel) => (
+          <ImovelCard key={imovel.id} imovelId={imovel.id} />
+        ))}
       </div>
-    </AddedImovelContext.Provider>
+      <Dialog>
+        <DialogContent className="max-w-[95vw] p-2 rounded-sm">
+          <DialogTitle>Adicionar Imóvel</DialogTitle>
+          <AddForm></AddForm>
+        </DialogContent>
+
+        <DialogTrigger className="absolute bottom-28 right-10 z-30 bg-blue-600 rounded-full text-slate-50 p-2 shadow-md hover:scale-110 hover:rotate-100 transition-all">
+          <Plus size={24} weight="bold" />
+        </DialogTrigger>
+      </Dialog>
+    </div>
   );
 }
