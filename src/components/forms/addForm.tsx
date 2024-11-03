@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { createId } from "@paralleldrive/cuid2";
@@ -16,8 +15,7 @@ import {
   Textbox,
 } from "phosphor-react";
 import { ChevronLeft, ChevronRight, Mailbox } from "lucide-react";
-import addSchema from "@/schemas/addFormSchema";
-import submitImovelSchema from "@/schemas/submitImovelSchema";
+import imovelSchema, { Imovel } from "@/schemas/imovelScheema";
 import { apiUrl } from "@/utils";
 import { toast } from "sonner";
 import { OptionSwitch } from "../ui/option-switch";
@@ -35,64 +33,48 @@ export default function AddForm() {
     setFormStep(formStep - 1);
   }
 
-  type AddFormInputs = z.infer<typeof addSchema>;
-  type SubmitImovelType = z.infer<typeof submitImovelSchema>;
-
   const {
     register,
     handleSubmit,
     setValue,
     watch,
     formState: { errors },
-  } = useForm<AddFormInputs>({
-    resolver: zodResolver(addSchema),
+  } = useForm<Imovel>({
+    resolver: zodResolver(imovelSchema),
     defaultValues: {
       cep: "129740-000",
       preco: "4500",
     },
   });
 
-  const files = watch("imagens");
+  const files = watch("imageFile");
   const estado = watch("estado");
   const correctedCep = watch("cep").replace(/(\d{5})(\d{3})/, "$1-$2");
   const correctedPreco = watch("preco")
     .replace(/\D/g, "")
     .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
-  async function onSubmit(formData: AddFormInputs) {
+  async function onSubmit(formData: Imovel) {
     toast("Adicionando Imóvel");
     const newFileNames: string[] = [];
 
-    formData.imagens.forEach((imagem: File) => {
+    formData.imageFile?.forEach((imagem: File) => {
+      if (typeof imagem === typeof "string") return;
       const extensao = imagem.name.match(/\.\w+$/); //A interrogação é apenas para confirmar que o objeto não irá ser nulo
       const newName = `${createId()}${extensao?.at(0)}`;
       newFileNames.push(newName);
     });
 
-    const submitData: SubmitImovelType = {
-      imagens: newFileNames,
-      titulo: formData.titulo,
-      transaction: formData.transaction,
-      bairro: formData.bairro,
-      cep: formData.cep,
-      cidade: formData.cidade,
-      desc: formData.desc,
-      estado: formData.estado,
-      geral: formData.geral,
-      logradouro: formData.logradouro,
-      numero: formData.numero,
-      preco: formData.preco,
-      tipo: formData.tipo,
-    };
+    formData.imagens = newFileNames;
 
-    const response = axios.post(apiUrl + "upload", submitData.imagens);
+    const response = axios.post(apiUrl + "upload", formData.imagens);
     const sendImageLinks: string[] = (await response).data;
 
     for (let i = 0; i < sendImageLinks.length; i++) {
       await axios
-        .put(sendImageLinks[i], formData.imagens[i], {
+        .put(sendImageLinks[i], formData.imageFile![i], {
           headers: {
-            "Content-Type": formData.imagens[i].type, // Configura o Content-Type adequado
+            "Content-Type": formData.imageFile![i].type, // Configura o Content-Type adequado
           },
         })
         .then(
@@ -108,19 +90,18 @@ export default function AddForm() {
     }
 
     await axios
-      .post(apiUrl + "imovel", submitData)
+      .post(apiUrl + "imovel", formData)
       .then(
         (res) => {
           toast(res.data);
+          window.location.reload();
         },
         (res) => {
           toast("Erro ao adicionar imóvel");
           console.log(res.response.data);
         }
       )
-      .finally(() => {
-        window.location.reload();
-      });
+      .finally(() => {});
   }
 
   useEffect(() => {
@@ -348,7 +329,7 @@ export default function AddForm() {
                 accept="image/*"
                 multiple
                 className="hidden outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-full"
-                {...register("imagens")}
+                {...register("imageFile")}
               />
             </div>
 
@@ -480,6 +461,7 @@ export default function AddForm() {
           </div>
         </section>
         <pre>{JSON.stringify(watch(), null, 2)}</pre>
+        <pre>{JSON.stringify(errors)}</pre>
 
         {formStep === 1 && (
           <Button

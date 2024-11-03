@@ -55,7 +55,7 @@ const ImovelCard = (props: Props) => {
       });
     }
     getImovel();
-  }, [api]);
+  }, [api, props.imovelId]);
 
   async function deleteImovel() {
     const deletedMessage = (await axios.delete(apiUrl + props.imovelId)).data;
@@ -79,7 +79,7 @@ const ImovelCard = (props: Props) => {
             whileTap={{ scale: 0.9 }}
           >
             <img
-              src={imageStore + imovel?.imageList[0]}
+              src={imageStore + imovel?.imagens![0]}
               className="w-full h-64 rounded-md m-auto"
             />
             <div className="p-2">
@@ -106,7 +106,7 @@ const ImovelCard = (props: Props) => {
               className="relative w-full rounded-sm bg-slate-100 m-auto"
             >
               <CarouselContent className="  h-fit w-fit max-h-[400px] ">
-                {imovel?.imageList.map((image) => {
+                {imovel?.imagens!.map((image) => {
                   return (
                     <CarouselItem
                       key={image}

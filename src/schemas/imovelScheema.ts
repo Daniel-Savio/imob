@@ -1,10 +1,21 @@
 import { z } from "zod";
 
 const imovelSchema = z.object({
-    id: z.string(),
-    imageList: z.array(z.string()),
-    createdAt: z.string(),
-    updatedAt: z.string(),
+    id: z.string().optional(),
+    imagens: z.array(z.string()).optional(),
+    imageFile: z.instanceof(FileList)
+        .refine((list) => list.length, "Insira ao menos uma imagem do imóvel")
+        .transform((list) => {
+            const fileList: File[] = [];
+            for (let i = 0; i < list.length; i++) {
+                fileList.push(list[i]);
+
+            }
+            return fileList;
+
+        }).optional(),
+    createdAt: z.string().optional(),
+    updatedAt: z.string().optional(),
     preco: z
         .string()
         .regex(/^\d{1,3}(\.\d{3})*(,\d{2})?$/),
