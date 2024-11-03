@@ -50,7 +50,7 @@ const Imoveis: React.FC = () => {
         <div className="flex flex-wrap justify-center items-center overflow-y-scroll w-full">
           {list?.map((imovel) => (
             <div key={imovel.id} className="m-2">
-              <ImovelCard visible="hidden" imovelId={imovel.id} />
+              <ImovelCard visible="hidden" imovelId={imovel.id!} />
             </div>
           ))}
         </div>
