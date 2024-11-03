@@ -83,11 +83,11 @@ export default function Admin() {
 
         <div className="flex flex-wrap justify-center items-center gap-5 overflow-y-scroll w-full">
           {list?.map((imovel) => (
-            <ImovelCard key={imovel.id} imovelId={imovel.id} />
+            <ImovelCard key={imovel.id} imovelId={imovel.id!} />
           ))}
         </div>
         <Dialog>
-          <DialogContent className="max-w-[95vw] p-2 rounded-sm">
+          <DialogContent className="max-w-[65vw] p-2 rounded-sm">
             <DialogTitle>Adicionar Imóvel</DialogTitle>
             <AddForm></AddForm>
           </DialogContent>

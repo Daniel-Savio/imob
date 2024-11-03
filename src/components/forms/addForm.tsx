@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { createId } from "@paralleldrive/cuid2";
@@ -14,12 +14,14 @@ import {
   FloppyDisk,
   Textbox,
 } from "phosphor-react";
-import { ChevronLeft, ChevronRight, Mailbox } from "lucide-react";
+import { ChevronLeft, ChevronRight, Mailbox, Plus, Trash } from "lucide-react";
 import imovelSchema, { Imovel } from "@/schemas/imovelScheema";
 import { apiUrl } from "@/utils";
 import { toast } from "sonner";
 import { OptionSwitch } from "../ui/option-switch";
 import { Button } from "../ui/button";
+import { Separator } from "../ui/separator";
+import { motion } from "framer-motion";
 
 export default function AddForm() {
   const [transaction, setTransaction] = useState<string>("Venda");
@@ -38,6 +40,7 @@ export default function AddForm() {
     handleSubmit,
     setValue,
     watch,
+    control,
     formState: { errors },
   } = useForm<Imovel>({
     resolver: zodResolver(imovelSchema),
@@ -45,6 +48,12 @@ export default function AddForm() {
       cep: "129740-000",
       preco: "4500",
     },
+  });
+
+  // eslint-disable-next-line no-empty-pattern
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "room",
   });
 
   const files = watch("imageFile");
@@ -115,6 +124,12 @@ export default function AddForm() {
     }
   }, [transaction, estado, setValue]);
 
+  function addNewRoom() {
+    append({ nome: "Daniel", area: "4" });
+  }
+  function removeRoom(index: number) {
+    remove(index);
+  }
   return (
     <form
       action="submit"
@@ -136,6 +151,7 @@ export default function AddForm() {
               <Textbox className="size-5 text-zinc-600" />
               <input
                 list="estados"
+                type="text"
                 placeholder="São Paulo, Minas Gerais, etc"
                 className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-full"
                 {...register("estado")}
@@ -460,12 +476,162 @@ export default function AddForm() {
             </Button>
           </div>
         </section>
-        <pre>{JSON.stringify(watch(), null, 2)}</pre>
-        <pre>{JSON.stringify(errors)}</pre>
 
-        {formStep === 1 && (
+        <section
+          id="part-three"
+          className={`${formStep === 2 ? "" : "hidden"} flex flex-col gap-2`}
+        >
+          <h1 className="text-2xl font-semibold flex w-full justify-between">
+            Cômodos
+          </h1>
+
+          {fields.map((field, index) => {
+            return (
+              <motion.section
+                initial={{ opacity: 0, y: "10%" }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-2 my-2 md:my-0"
+                key={field.id}
+              >
+                <div className="w-full space-y-2 md:space-y-0 md:flex md:gap-2 md:items-center">
+                  {/* Nome */}
+                  <div>
+                    <label htmlFor="" className="font-bold">
+                      Nome
+                    </label>
+                    <div className="border rounded p-2 flex gap-2 items-center w-full bg-zinc-50">
+                      <Textbox className="size-5 text-zinc-600" />
+                      <input
+                        type="text"
+                        placeholder="Quarto, Sala, Cozinha, etc"
+                        className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-full"
+                        {...register(`room.${index}.nome`)}
+                      />
+                    </div>
+                  </div>
+                  {/* Area */}
+                  <div>
+                    <label htmlFor="" className="font-bold">
+                      Área (m²)
+                    </label>
+                    <div className="border rounded p-2 flex gap-2 items-center w-full bg-zinc-50">
+                      <Textbox className="size-5 text-zinc-600" />
+                      <input
+                        type="text"
+                        placeholder="Quarto, Sala, Cozinha, etc"
+                        className="outline-none border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-full"
+                        {...register(`room.${index}.area`)}
+                      />
+                    </div>
+                  </div>
+                  {/* Apagar */}
+
+                  <div
+                    onClick={() => {
+                      removeRoom(index);
+                    }}
+                    className="w-fit flex text-sm items-center gap-2 cursor-pointer text-red-500"
+                  >
+                    {" "}
+                    Apagar <Trash className="w-4 h-4" />
+                  </div>
+                </div>
+
+                {errors.room && (
+                  <span className="text-red-500 text-sm">
+                    {errors.titulo?.message}
+                  </span>
+                )}
+                <Separator></Separator>
+              </motion.section>
+            );
+          })}
+          <div
+            onClick={addNewRoom}
+            className="w-fit flex text-sm items-center gap-2 cursor-pointer text-blue-500"
+          >
+            {" "}
+            Adicionar <Plus className="w-4 h-4" />
+          </div>
+
+          <div className="w-full flex mt-2">
+            <Button type="button" className="mx-auto" onClick={previousStep}>
+              <ChevronLeft />
+              Anterior
+            </Button>
+          </div>
+        </section>
+
+        {/* <pre>{JSON.stringify(watch(), null, 2)}</pre> */}
+        {formStep === 2 && (
+          <section className="flex flex-col gap-2">
+            {errors.bairro && (
+              <span className="text-red-500 text-sm">
+                {errors.bairro?.message}
+              </span>
+            )}
+            {errors.cep && (
+              <span className="text-red-500 text-sm">
+                {errors.cep?.message}
+              </span>
+            )}
+            {errors.cidade && (
+              <span className="text-red-500 text-sm">
+                {errors.cidade?.message}
+              </span>
+            )}
+            {errors.desc && (
+              <span className="text-red-500 text-sm">
+                {errors.desc?.message}
+              </span>
+            )}
+            {errors.estado && (
+              <span className="text-red-500 text-sm">
+                {errors.estado?.message}
+              </span>
+            )}
+            {errors.tipo && (
+              <span className="text-red-500 text-sm">
+                {errors.tipo?.message}
+              </span>
+            )}
+            {errors.geral && (
+              <span className="text-red-500 text-sm">
+                {errors.geral?.message}
+              </span>
+            )}
+            {errors.imageFile && (
+              <span className="text-red-500 text-sm">
+                {errors.imageFile?.message}
+              </span>
+            )}
+            {errors.imagens && (
+              <span className="text-red-500 text-sm">
+                {errors.imagens?.message}
+              </span>
+            )}
+            {errors.logradouro && (
+              <span className="text-red-500 text-sm">
+                {errors.logradouro?.message}
+              </span>
+            )}
+            {errors.numero && (
+              <span className="text-red-500 text-sm">
+                {errors.numero?.message}
+              </span>
+            )}
+            {errors.preco && (
+              <span className="text-red-500 text-sm">
+                {errors.preco?.message}
+              </span>
+            )}
+          </section>
+        )}
+
+        {formStep === 2 && (
           <Button
-            className="p-2 rounded-sm flex mt-4 mx-auto w-full max-h-fit font-semibold text-zinc-50"
+            className="p-2 rounded-sm flex mt-4 mx-auto w-full md:w-96 max-h-fit font-semibold text-zinc-50"
             type="submit"
           >
             <FloppyDisk size={22} />
