@@ -14,7 +14,16 @@ import {
   FloppyDisk,
   Textbox,
 } from "phosphor-react";
-import { ChevronLeft, ChevronRight, Mailbox, Plus, Trash } from "lucide-react";
+import {
+  Ban,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  Info,
+  Mailbox,
+  Plus,
+  Trash,
+} from "lucide-react";
 import imovelSchema, { Imovel } from "@/schemas/imovelScheema";
 import { apiUrl } from "@/utils";
 import { toast } from "sonner";
@@ -64,7 +73,10 @@ export default function AddForm() {
     .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
   async function onSubmit(formData: Imovel) {
-    toast("Adicionando Imóvel");
+    toast("Adicionando Imóvel", {
+      icon: <Info className="text-blue-500"></Info>,
+      closeButton: true,
+    });
     const newFileNames: string[] = [];
 
     formData.imageFile?.forEach((imagem: File) => {
@@ -88,11 +100,15 @@ export default function AddForm() {
         })
         .then(
           () => {
-            toast(`Fazendo o upload da ${i + 1}° Imagem`);
+            toast(`Fazendo o upload da ${i + 1}° Imagem`, {
+              icon: <Info className="text-blue-500"></Info>,
+              closeButton: true,
+            });
           },
           () => {
             toast(
-              `Upload da imagem ${i + 1} com problema. Verifique o Storage`
+              `Upload da imagem ${i + 1} com problema. Verifique o Storage`,
+              { icon: <Ban className="text-red-500"></Ban>, closeButton: true }
             );
           }
         );
@@ -102,11 +118,13 @@ export default function AddForm() {
       .post(apiUrl + "imovel", formData)
       .then(
         (res) => {
-          toast(res.data);
+          toast(res.data, { icon: <Check className="text-green-500"></Check> });
           window.location.reload();
         },
         (res) => {
-          toast("Erro ao adicionar imóvel");
+          toast("Erro ao adicionar imóvel", {
+            icon: <Ban className="text-red-500"></Ban>,
+          });
           console.log(res.response.data);
         }
       )

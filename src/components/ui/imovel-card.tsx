@@ -21,7 +21,7 @@ import {
 import { Dialog } from "@radix-ui/react-dialog";
 import { Separator } from "./separator";
 import { ScrollArea, ScrollBar } from "./scroll-area";
-import { Pencil, Trash } from "lucide-react";
+import { Check, Pencil, Trash } from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "./badge";
 import EditForm from "../forms/editForm";
@@ -63,7 +63,7 @@ const ImovelCard = (props: Props) => {
     const deletedMessage = (await axios.delete(apiUrl + props.imovelId)).data;
     setVisible(!visible);
 
-    toast(deletedMessage);
+    toast(deletedMessage, { icon: <Check className="text-green-500"></Check> });
   }
 
   return (
@@ -167,7 +167,7 @@ const ImovelCard = (props: Props) => {
       {imovel && (
         <div className={`flex justify-center mt-2 gap-2 ${props.visible} `}>
           <Dialog>
-            <DialogContent className="max-w-[65vw] p-2 rounded-sm">
+            <DialogContent className="w-full md:max-w-[65vw] p-2 rounded-sm">
               <DialogTitle className="items-center ">
                 Edição do imóvel: <Badge variant="outline">{imovel?.id}</Badge>
               </DialogTitle>
