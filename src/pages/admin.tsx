@@ -87,7 +87,7 @@ export default function Admin() {
           ))}
         </div>
         <Dialog>
-          <DialogContent className="w-full max-h-[95vh] md:max-w-[65vw] p-2 rounded-sm">
+          <DialogContent className="w-full max-h-[97vh] md:max-w-[65vw] p-2 rounded-sm overflow-auto">
             <DialogTitle>Adicionar Imóvel</DialogTitle>
             <AddForm></AddForm>
           </DialogContent>
