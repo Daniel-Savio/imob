@@ -15,7 +15,7 @@ export default function Home() {
       <main className="relative m-5 p-8 rounded-lg shadow-md bg-imobWhite backdrop-blur-md bg-opacity-80">
         <div className=" flex flex-col z-20 gap-10 md:gap-32">
           <h1 className="font-bold text-4xl">
-            Encontre um novo imóvel <br></br>para o seus lar
+            Encontre um novo imóvel <br></br>para o seu lar
           </h1>
           <h3 className="text-muted-foreground text-lg">
             Opções para a família completa, <br></br>no melhores bairros e
