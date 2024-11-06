@@ -14,19 +14,33 @@ import {
   FloppyDisk,
   Textbox,
 } from "phosphor-react";
-import { ChevronLeft, ChevronRight, Mailbox, Plus, Trash } from "lucide-react";
+import {
+  Ban,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  Info,
+  Mailbox,
+  Plus,
+  Trash,
+} from "lucide-react";
 import imovelSchema, { Imovel } from "@/schemas/imovelScheema";
-import { apiUrl } from "@/utils";
+import { apiUrl, imageStore } from "@/utils";
 import { toast } from "sonner";
 import { OptionSwitch } from "../ui/option-switch";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { motion } from "framer-motion";
 
-export default function AddForm() {
+interface EditFormProps {
+  imovel: Imovel;
+}
+
+export default function EditForm({ imovel }: EditFormProps) {
   const [transaction, setTransaction] = useState<string>("Venda");
   const [formStep, setFormStep] = useState(0);
   const [citiyList, setCitiyList] = useState(["cidades"]);
+  const [visible, setVisible] = useState<boolean>(true);
 
   function nextStep() {
     setFormStep(formStep + 1);
@@ -45,8 +59,20 @@ export default function AddForm() {
   } = useForm<Imovel>({
     resolver: zodResolver(imovelSchema),
     defaultValues: {
-      cep: "129740-000",
-      preco: "4500",
+      estado: imovel.estado,
+      bairro: imovel.bairro,
+      desc: imovel.desc,
+      geral: imovel.geral,
+      cep: imovel.cep,
+      preco: imovel.preco,
+      imagens: imovel.imagens,
+      room: imovel.room,
+      numero: imovel.numero,
+      tipo: imovel.tipo,
+      transaction: imovel.transaction,
+      logradouro: imovel.logradouro,
+      titulo: imovel.titulo,
+      cidade: imovel.cidade,
     },
   });
 
@@ -64,49 +90,80 @@ export default function AddForm() {
     .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
   async function onSubmit(formData: Imovel) {
-    toast("Adicionando Imóvel");
+    toast("Editando Imóvel", {
+      icon: <Info className="text-imobSecondary"></Info>,
+      closeButton: true,
+    });
+    formData.id = imovel.id;
+    formData.imagens = imovel.imagens;
+    console.log(formData.imagens);
     const newFileNames: string[] = [];
 
-    formData.imageFile?.forEach((imagem: File) => {
-      if (typeof imagem === typeof "string") return;
-      const extensao = imagem.name.match(/\.\w+$/); //A interrogação é apenas para confirmar que o objeto não irá ser nulo
-      const newName = `${createId()}${extensao?.at(0)}`;
-      newFileNames.push(newName);
-    });
+    if (formData.imageFile?.length) {
+      formData.imageFile?.forEach((imagem: File) => {
+        if (typeof imagem === typeof "string") return;
+        const extensao = imagem.name.match(/\.\w+$/); //A interrogação é apenas para confirmar que o objeto não irá ser nulo
+        const newName = `${createId()}${extensao?.at(0)}`;
+        newFileNames.push(newName);
+        formData.imagens?.push(newName);
+      });
 
-    formData.imagens = newFileNames;
+      toast("Adicionando imagem ao imóvel:", {
+        icon: <Info className="text-imobSecondary"></Info>,
+        closeButton: true,
+      });
+      console.log(formData.imagens);
 
-    const response = axios.post(apiUrl + "upload", formData.imagens);
-    const sendImageLinks: string[] = (await response).data;
+      const response = axios.post(apiUrl + "upload", newFileNames);
+      const sendImageLinks: string[] = (await response).data;
 
-    for (let i = 0; i < sendImageLinks.length; i++) {
-      await axios
-        .put(sendImageLinks[i], formData.imageFile![i], {
-          headers: {
-            "Content-Type": formData.imageFile![i].type, // Configura o Content-Type adequado
-          },
-        })
-        .then(
-          () => {
-            toast(`Fazendo o upload da ${i + 1}° Imagem`);
-          },
-          () => {
-            toast(
-              `Upload da imagem ${i + 1} com problema. Verifique o Storage`
-            );
-          }
-        );
+      //Upload das imagens
+      for (let i = 0; i < sendImageLinks.length; i++) {
+        await axios
+          .put(sendImageLinks[i], formData.imageFile![i], {
+            headers: {
+              "Content-Type": formData.imageFile![i].type, // Configura o Content-Type adequado
+            },
+          })
+          .then(
+            () => {
+              toast(`Fazendo o upload da ${i + 1}° Imagem`, {
+                icon: <Info className="text-imobSecondary"></Info>,
+                closeButton: true,
+              });
+            },
+            () => {
+              toast(
+                `Upload da imagem ${i + 1} com problema. Verifique o Storage`,
+                { icon: <Ban className="text-red-500"></Ban> }
+              );
+            }
+          );
+      }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { imageFile, ...editData } = formData;
+    console.log(formData);
+
     await axios
-      .post(apiUrl + "imovel", formData)
+      .put(apiUrl + "imovel", editData)
       .then(
         (res) => {
-          toast(res.data);
-          window.location.reload();
+          toast(
+            `
+             ${res.data}
+            As imagens podem demorar cerca de 2 minutos para aparecerem`,
+            {
+              icon: <Check className="text-green-500"></Check>,
+              closeButton: true,
+            }
+          );
         },
         (res) => {
-          toast("Erro ao adicionar imóvel");
+          toast("Erro ao adicionar imóvel", {
+            icon: <Ban className="text-red-500"></Ban>,
+          });
           console.log(res.response.data);
         }
       )
@@ -130,6 +187,28 @@ export default function AddForm() {
   function removeRoom(index: number) {
     remove(index);
   }
+
+  async function deleteImage(imagem: string) {
+    if (!imovel.imagens?.length) return;
+    console.log({ image: imagem });
+    const index: number = imovel.imagens.indexOf(imagem);
+
+    await axios.post(apiUrl + "delete-image", { image: imagem }).then(
+      (res) => {
+        toast(res.data, {
+          icon: <Ban className="text-red-500"></Ban>,
+          closeButton: true,
+        });
+        imovel.imagens?.splice(index, 1);
+        setVisible(!visible);
+      },
+      (error) => {
+        toast("Erro ao deletar imagem");
+        console.log(error);
+      }
+    );
+  }
+
   return (
     <form
       action="submit"
@@ -181,12 +260,17 @@ export default function AddForm() {
             <div className="border rounded p-2 flex gap-2 items-center w-full bg-zinc-50">
               <Textbox className="size-5 text-zinc-600" />
               <select
-                disabled={estado ? false : true}
                 className="outline-none focus:ring focus:ring-blue-300 border-solid bg-transparent text-zinc-600 placeholder-zinc-500 w-full"
                 id="cidades"
                 {...register("cidade")}
               >
                 {citiyList.map((city) => {
+                  if (city === imovel.cidade)
+                    return (
+                      <option key={city} value={city} selected>
+                        {city}
+                      </option>
+                    );
                   return (
                     <option key={city} value={city}>
                       {city}
@@ -323,7 +407,40 @@ export default function AddForm() {
           </div>
 
           <div className="w-full">
-            <p className="font-bold">Fotos</p>
+            <p className="font-bold">Fotos Já existentes</p>
+            {imovel.imagens && (
+              <div className="rounded flex flex-wrap gap-8 mt-5 items-center w-full justify-center">
+                {imovel.imagens?.map((imagem) => {
+                  return (
+                    <motion.div
+                      className={`fit relative`}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <img
+                        key={imagem}
+                        className="max-h-24 max-w-56"
+                        src={imageStore + imagem}
+                        alt=""
+                      />
+                      <Button
+                        type="button"
+                        onClick={() => {
+                          deleteImage(imagem);
+                        }}
+                        variant={"destructive"}
+                        className="hover:scale-110 transition-all hover:opacity-100 shadow-md absolute rounded-full p-3 -top-2 -left-1 z-50"
+                      >
+                        <Trash className="w-4"></Trash>
+                      </Button>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          <div className="w-full">
+            <p className="font-bold">Fotos Adicionais</p>
             <div className="rounded flex gap-2 items-center w-full bg-zinc-50 border-dashed border-zinc-400 border-2">
               <label
                 htmlFor="image"
@@ -570,7 +687,6 @@ export default function AddForm() {
           </div>
         </section>
 
-        <pre>{JSON.stringify(watch(), null, 2)}</pre>
         {formStep === 2 && (
           <section className="flex flex-col gap-2">
             {errors.bairro && (
@@ -635,16 +751,14 @@ export default function AddForm() {
             )}
           </section>
         )}
+        <Button
+          className="p-2 rounded-sm flex mt-4 mx-auto w-full md:w-96 max-h-fit font-semibold text-zinc-50"
+          type="submit"
+        >
+          <FloppyDisk size={22} />
+          Salvar imóvel
+        </Button>
 
-        {formStep === 2 && (
-          <Button
-            className="p-2 rounded-sm flex mt-4 mx-auto w-full md:w-96 max-h-fit font-semibold text-zinc-50"
-            type="submit"
-          >
-            <FloppyDisk size={22} />
-            Salvar imóvel
-          </Button>
-        )}
         {/* <pre> {JSON.stringify(watch(), null, 2)}</pre> */}
       </div>
     </form>
