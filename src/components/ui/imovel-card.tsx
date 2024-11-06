@@ -167,7 +167,7 @@ const ImovelCard = (props: Props) => {
       {imovel && (
         <div className={`flex justify-center mt-2 gap-2 ${props.visible} `}>
           <Dialog>
-            <DialogContent className="w-full md:max-w-[65vw] p-2 rounded-sm">
+            <DialogContent className="w-full max-h-[95vh] md:max-w-[65vw] p-2 rounded-sm">
               <DialogTitle className="items-center ">
                 Edição do imóvel: <Badge variant="outline">{imovel?.id}</Badge>
               </DialogTitle>

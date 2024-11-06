@@ -588,7 +588,6 @@ export default function AddForm() {
           </div>
         </section>
 
-        <pre>{JSON.stringify(watch(), null, 2)}</pre>
         {formStep === 2 && (
           <section className="flex flex-col gap-2">
             {errors.bairro && (
