@@ -21,8 +21,10 @@ import {
 import { Dialog } from "@radix-ui/react-dialog";
 import { Separator } from "./separator";
 import { ScrollArea, ScrollBar } from "./scroll-area";
-import { Trash } from "lucide-react";
+import { Pencil, Trash } from "lucide-react";
 import { toast } from "sonner";
+import { Badge } from "./badge";
+import EditForm from "../forms/editForm";
 export interface Props {
   imovelId: string;
   visible?: "hidden" | "";
@@ -146,7 +148,7 @@ const ImovelCard = (props: Props) => {
               <pre className="bg-slate-100 font-sans text-wrap text-justify p-2 ">
                 {imovel?.desc}
               </pre>
-              <ScrollBar className="w-2" />
+              <ScrollBar />
             </ScrollArea>
             <br />
             <a
@@ -158,26 +160,38 @@ const ImovelCard = (props: Props) => {
                 Falar com o vendedor
               </Button>
             </a>
+            <ScrollBar />
           </ScrollArea>
         </DialogContent>
       </Dialog>
-      <div className={`flex justify-center mt-2 ${props.visible} `}>
-        {/* <Button
-          type="button"
-          className="px-3 py-1 bg-blue-700 text-slate-50 rounded-md gap-2"
-        >
-          <PencilSimple size={16} />
-          Editar
-        </Button> */}
-        <Button
-          variant={"destructive"}
-          onClick={deleteImovel}
-          className="px-3 py-1 bg-red-700 text-slate-50 rounded-md gap-2"
-        >
-          <Trash className="" />
-          Apagar
-        </Button>
-      </div>
+      {imovel && (
+        <div className={`flex justify-center mt-2 gap-2 ${props.visible} `}>
+          <Dialog>
+            <DialogContent className="max-w-[65vw] p-2 rounded-sm">
+              <DialogTitle className="items-center ">
+                Edição do imóvel: <Badge variant="outline">{imovel?.id}</Badge>
+              </DialogTitle>
+              <EditForm imovel={imovel}></EditForm>
+            </DialogContent>
+
+            <DialogTrigger>
+              <Button className="px-3 py-1 bg-blue-700 text-slate-50 rounded-md gap-2">
+                <Pencil />
+                Editar
+              </Button>
+            </DialogTrigger>
+          </Dialog>
+
+          <Button
+            variant={"destructive"}
+            onClick={deleteImovel}
+            className="px-3 py-1 bg-red-700 text-slate-50 rounded-md gap-2"
+          >
+            <Trash className="" />
+            Apagar
+          </Button>
+        </div>
+      )}
     </motion.div>
   );
 };

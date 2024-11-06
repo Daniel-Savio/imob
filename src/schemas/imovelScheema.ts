@@ -4,7 +4,6 @@ const imovelSchema = z.object({
     id: z.string().optional(),
     imagens: z.array(z.string()).optional(),
     imageFile: z.instanceof(FileList)
-        .refine((list) => list.length, "Insira ao menos uma imagem do imóvel")
         .transform((list) => {
             const fileList: File[] = [];
             for (let i = 0; i < list.length; i++) {
