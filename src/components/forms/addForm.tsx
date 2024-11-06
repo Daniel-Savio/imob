@@ -119,7 +119,6 @@ export default function AddForm() {
       .then(
         (res) => {
           toast(res.data, { icon: <Check className="text-green-500"></Check> });
-          window.location.reload();
         },
         (res) => {
           toast("Erro ao adicionar imóvel", {
