@@ -56,7 +56,7 @@ export default function Admin() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center text-center w-full">
+      <div className="flex justify-center text-center ">
         <h1>
           Carregando imóveis <LoaderCircle className="animate-spin" />{" "}
         </h1>

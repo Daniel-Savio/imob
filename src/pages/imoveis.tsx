@@ -24,7 +24,7 @@ const Imoveis: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col justify-center">
+      <div className="flex justify-center text-center">
         <h1>
           Carregando imóveis <LoaderCircle className="animate-spin" />{" "}
         </h1>

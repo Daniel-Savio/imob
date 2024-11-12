@@ -21,7 +21,7 @@ import {
 import { Dialog } from "@radix-ui/react-dialog";
 import { Separator } from "./separator";
 import { ScrollArea, ScrollBar } from "./scroll-area";
-import { Check, Pencil, Trash } from "lucide-react";
+import { Check, DoorOpen, LandPlot, Pencil, Trash } from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "./badge";
 import EditForm from "../forms/editForm";
@@ -142,8 +142,32 @@ const ImovelCard = (props: Props) => {
               </h1>
             </div>
             <Separator />
+            <div className="my-3">
+              <h1 className="text-lg my-1 font-bold">Cômodos</h1>
+              <div className="flex flex-wrap justify-center gap-2">
+                {imovel?.room &&
+                  imovel?.room.map((room) => {
+                    return (
+                      <div
+                        key={imovel.id}
+                        className="flex gap-5 border p-1 my-4 rounded-sm w-fit"
+                      >
+                        <div className="flex gap-2">
+                          <DoorOpen className="text-blue-600" />
+                          {room.nome}
+                        </div>
+                        <div className="flex gap-2">
+                          <LandPlot className="text-blue-600" />
+                          {room.area} m²
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
+            <Separator />
             <br></br>
-            <h1 className="text-lg ">Descrição</h1>
+            <h1 className="text-lg font-bold">Descrição</h1>
             <ScrollArea className="shadow-md rounded-md max-h-64 overflow-auto ">
               <pre className="bg-slate-100 font-sans text-wrap text-justify p-2 ">
                 {imovel?.desc}

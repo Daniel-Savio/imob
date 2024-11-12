@@ -142,7 +142,7 @@ export default function AddForm() {
   }, [transaction, estado, setValue]);
 
   function addNewRoom() {
-    append({ nome: "Daniel", area: "4" });
+    append({ nome: "Quarto", area: "4" });
   }
   function removeRoom(index: number) {
     remove(index);
