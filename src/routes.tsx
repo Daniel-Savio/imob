@@ -14,7 +14,8 @@ export default function AppRoutes() {
           <Route path="/" element={<Home />} />
           <Route path="/locked" element={<About />} />
           <Route path="/admin" element={<Admin />} />
-          <Route path="/imoveis" element={<Imoveis />} />
+          <Route path="/imoveis/:filter" element={<Imoveis />} />
+          <Route path="/imoveis/" element={<Imoveis />} />
         </Route>
       </Routes>
     </BrowserRouter>

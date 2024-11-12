@@ -41,13 +41,13 @@ export default function MainFrame() {
             Home
           </Link>
           <Link
-            to="/imoveis"
+            to="/imoveis/Aluguel/"
             className="hover:text-imobPrimary hover:underline"
           >
             Aluguel
           </Link>
           <Link
-            to="/imoveis"
+            to="/imoveis/Venda/"
             className="hover:text-imobPrimary hover:underline"
           >
             Venda
@@ -72,13 +72,13 @@ export default function MainFrame() {
             Home
           </Link>
           <Link
-            to="/imoveis"
+            to="/imoveis/Aluguel"
             className="hover:text-imobPrimary hover:underline"
           >
             Aluguel
           </Link>
           <Link
-            to="/imoveis"
+            to="/imoveis/Venda"
             className="hover:text-imobPrimary hover:underline"
           >
             Venda
@@ -100,7 +100,7 @@ export default function MainFrame() {
         />
       </header>
 
-      <ScrollArea className="min-h-[100vh] relative mt-10 p-5">
+      <ScrollArea className="min-h-[100vh] relative  p-5">
         <Outlet></Outlet>
       </ScrollArea>
 
