@@ -74,7 +74,7 @@ const ImovelCard = (props: Props) => {
       variants={variants}
     >
       <Dialog>
-        <DialogTrigger className="text-left max-w-72">
+        <DialogTrigger className="text-left max-w-72 h-80">
           <motion.div
             className=" rounded-md bg-zinc-100 shadow-lg"
             whileHover={{ scale: 1.08 }}
@@ -146,10 +146,10 @@ const ImovelCard = (props: Props) => {
               <h1 className="text-lg my-1 font-bold">Cômodos</h1>
               <div className="flex flex-wrap justify-center gap-2">
                 {imovel?.room &&
-                  imovel?.room.map((room) => {
+                  imovel?.room.map((room, index) => {
                     return (
                       <div
-                        key={imovel.id}
+                        key={index}
                         className="flex gap-5 border p-1 my-4 rounded-sm w-fit"
                       >
                         <div className="flex gap-2">
