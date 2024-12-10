@@ -3,7 +3,7 @@ import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { motion } from "framer-motion";
 import { ChevronRight, CircleX, LogIn, Logs, MapPin } from "lucide-react";
-import { House } from "phosphor-react";
+import { House, WhatsappLogo } from "phosphor-react";
 import { useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 
@@ -104,7 +104,7 @@ export default function MainFrame() {
         <Outlet></Outlet>
       </ScrollArea>
 
-      <footer className="flex z-0 justify-center gap-10 bg-white bg-opacity-60 p-2 px-5 backdrop-blur-md">
+      <footer className="md:flex z-0 justify-center gap-10 bg-white bg-opacity-60 p-2 px-5 backdrop-blur-md">
         <div className="font-bold">
           <p>All Rights Reserved to: Daniel Pinheiro</p>
           <p>CRECI: 237714</p>
@@ -121,7 +121,15 @@ export default function MainFrame() {
             className="h-full w-1 bg-muted-foreground"
             orientation="vertical"
           ></Separator>
-          <Button>Contato</Button>
+          <a
+            className="w-full flex justify-center"
+            href={`whatsapp://send?text=Bom dia Daniel. \n Teconheci pelo site, consegue me ajudar? &phone=+5511941776334`}
+          >
+            <Button className="px-3 py-1 bg-blue-600 text-slate-50 rounded-md gap-2">
+              <WhatsappLogo size={16} />
+              Falar com o vendedor
+            </Button>
+          </a>
         </div>
       </footer>
     </section>
