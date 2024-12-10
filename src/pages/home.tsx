@@ -15,11 +15,11 @@ export default function Home() {
       <main className="relative m-5 p-8 rounded-lg shadow-md bg-imobWhite backdrop-blur-md bg-opacity-80">
         <div className=" flex flex-col z-20 gap-10 md:gap-32 text-center md:text-left">
           <h1 className="font-bold text-4xl">
-            Encontre um novo imóvel <br></br>para o seu lar
+            Encontre um novo imóvel <br></br>para você
           </h1>
           <h3 className="text-muted-foreground text-lg">
-            Opções para a família completa, <br></br>no melhores bairros e
-            sempre com uma ótima vizinhança
+            Diversas opções, <br></br>nos melhores bairros e sempre com uma
+            ótima vizinhança
             <div className="mt-8 space-y-4 space-x-2 sm:flex-row md:flex md:gap-2 md:space-y-0">
               <Button
                 onClick={() => {
